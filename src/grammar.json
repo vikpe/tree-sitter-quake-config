@@ -9,9 +9,29 @@
         "name": "_statement"
       }
     },
+    "comment": {
+      "type": "TOKEN",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "//"
+          },
+          {
+            "type": "PATTERN",
+            "value": ".*"
+          }
+        ]
+      }
+    },
     "_statement": {
       "type": "CHOICE",
       "members": [
+        {
+          "type": "SYMBOL",
+          "name": "setting"
+        },
         {
           "type": "SYMBOL",
           "name": "assignment"
@@ -23,8 +43,29 @@
         {
           "type": "SYMBOL",
           "name": "command"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bind"
         }
       ]
+    },
+    "setting": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "setting_name"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "value"
+        }
+      ]
+    },
+    "setting_name": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z][a-zA-Z0-9_]*"
     },
     "assignment": {
       "type": "SEQ",
@@ -59,6 +100,27 @@
           "name": "value"
         }
       ]
+    },
+    "bind": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "bind"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bind_key"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "value"
+        }
+      ]
+    },
+    "bind_key": {
+      "type": "PATTERN",
+      "value": "[a-zA-Z][a-zA-Z0-9_]*"
     },
     "alias": {
       "type": "SEQ",
@@ -122,25 +184,13 @@
       "type": "PATTERN",
       "value": "\\$[a-zA-Z_][a-zA-Z0-9_]*"
     },
+    "macro": {
+      "type": "PATTERN",
+      "value": "\\%[a-zA-Z][a-zA-Z0-9_]*"
+    },
     "quoted_variable": {
       "type": "PATTERN",
       "value": "\"\\$[a-zA-Z_][a-zA-Z0-9_]+\""
-    },
-    "comment": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "//"
-          },
-          {
-            "type": "PATTERN",
-            "value": ".*"
-          }
-        ]
-      }
     }
   },
   "extras": [

@@ -4,5 +4,8 @@
 (string) @string
 (variable) @variable
 
-(alias) @keyword
-(assignment) @keyword
+(alias) @function
+(assignment) @function
+(bind) @function
+(setting_name) @keyword
+(bind_key) @number

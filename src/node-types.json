@@ -38,6 +38,30 @@
     }
   },
   {
+    "type": "bind",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bind_key",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "bind_key",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "command",
     "named": true,
     "fields": {},
@@ -51,6 +75,30 @@
         }
       ]
     }
+  },
+  {
+    "type": "setting",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "setting_name",
+          "named": true
+        },
+        {
+          "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "setting_name",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "source_file",
@@ -70,7 +118,15 @@
           "named": true
         },
         {
+          "type": "bind",
+          "named": true
+        },
+        {
           "type": "command",
+          "named": true
+        },
+        {
+          "type": "setting",
           "named": true
         }
       ]
@@ -109,6 +165,10 @@
   },
   {
     "type": "alias",
+    "named": false
+  },
+  {
+    "type": "bind",
     "named": false
   },
   {
