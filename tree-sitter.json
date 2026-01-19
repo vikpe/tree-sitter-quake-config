@@ -6,11 +6,10 @@
       "camelcase": "QuakeConfig",
       "title": "Quake Config",
       "scope": "source.quake_config",
-      "file-types": [
-        "cfg"
-      ],
+      "file-types": ["cfg"],
       "injection-regex": "^quake_config$",
-      "class-name": "TreeSitterQuakeConfig"
+      "class-name": "TreeSitterQuakeConfig",
+      "highlights": "queries/highlights.scm"
     }
   ],
   "metadata": {
