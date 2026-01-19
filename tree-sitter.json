@@ -15,7 +15,7 @@
   "metadata": {
     "version": "0.1.0",
     "license": "MIT",
-    "description": "Quake Config Descr",
+    "description": "tree-sitter grammar for Quake config files",
     "authors": [
       {
         "name": "Viktor Persson",

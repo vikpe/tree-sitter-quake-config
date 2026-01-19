@@ -1,7 +1,7 @@
 {
   "name": "tree-sitter-quake-config",
   "version": "0.1.0",
-  "description": "Quake Config Descr",
+  "description": "tree-sitter grammar for Quake config files",
   "type": "module",
   "repository": {
     "type": "git",

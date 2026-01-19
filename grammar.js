@@ -1,5 +1,5 @@
 /**
- * @file Quake Config Descr
+ * @file tree-sitter grammar for Quake config files
  * @author Viktor Persson <viktor.persson@arcsin.se>
  * @license MIT
  */
