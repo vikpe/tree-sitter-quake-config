@@ -54,11 +54,19 @@
           "members": [
             {
               "type": "SYMBOL",
+              "name": "alias"
+            },
+            {
+              "type": "SYMBOL",
               "name": "bind"
             },
             {
               "type": "SYMBOL",
               "name": "command"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "set"
             }
           ]
         },
@@ -101,16 +109,55 @@
         }
       ]
     },
-    "bind": {
+    "alias": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "function"
+          "name": "alias_fn"
         },
         {
-          "type": "SYMBOL",
-          "name": "bind_expr"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "alias_name"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "alias_name"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "alias_name"
+            }
+          ]
         },
         {
           "type": "SYMBOL",
@@ -118,53 +165,165 @@
         }
       ]
     },
-    "bind_expr": {
+    "alias_fn": {
       "type": "CHOICE",
       "members": [
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "single_quote"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "bind_key"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "single_quote"
-            }
-          ]
+          "type": "STRING",
+          "value": "alias"
         },
         {
-          "type": "SEQ",
+          "type": "STRING",
+          "value": "tempalias"
+        }
+      ]
+    },
+    "alias_name": {
+      "type": "PATTERN",
+      "value": "[a-z0-9_.:-]+",
+      "flags": "i"
+    },
+    "bind": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "bind_fn"
+        },
+        {
+          "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "double_quote"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "bind_key"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "bind_key"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                }
+              ]
             },
             {
               "type": "SYMBOL",
               "name": "bind_key"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "double_quote"
             }
           ]
         },
         {
           "type": "SYMBOL",
-          "name": "bind_key"
+          "name": "command_argument"
         }
       ]
+    },
+    "bind_fn": {
+      "type": "STRING",
+      "value": "bind"
     },
     "bind_key": {
       "type": "PATTERN",
       "value": "[a-z0-9][a-z0-9_]*",
       "flags": "i"
+    },
+    "set": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "set_fn"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "bind_key"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "single_quote"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "bind_key"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "double_quote"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "bind_key"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "command_argument"
+        }
+      ]
+    },
+    "set_fn": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "set"
+        },
+        {
+          "type": "STRING",
+          "value": "set_tp"
+        },
+        {
+          "type": "STRING",
+          "value": "set_calc"
+        }
+      ]
+    },
+    "set_name": {
+      "type": "SYMBOL",
+      "name": "variable_name"
     },
     "terminator": {
       "type": "STRING",
@@ -217,6 +376,18 @@
         {
           "type": "STRING",
           "value": "isin"
+        },
+        {
+          "type": "STRING",
+          "value": "if_exists"
+        },
+        {
+          "type": "STRING",
+          "value": "or"
+        },
+        {
+          "type": "STRING",
+          "value": "and"
         }
       ]
     },
@@ -312,6 +483,20 @@
       "value": "[a-z0-9.:_-]+",
       "flags": "i"
     },
+    "colored_text": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "&c"
+        },
+        {
+          "type": "PATTERN",
+          "value": "[0-9a-f]{3}",
+          "flags": "i"
+        }
+      ]
+    },
     "command_argument": {
       "type": "CHOICE",
       "members": [
@@ -366,6 +551,10 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "PATTERN",
+          "value": "\\r?\\n"
+        },
+        {
           "type": "SYMBOL",
           "name": "conditional"
         },
@@ -388,6 +577,10 @@
         {
           "type": "SYMBOL",
           "name": "function"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "colored_text"
         }
       ]
     },
@@ -476,8 +669,20 @@
       "type": "CHOICE",
       "members": [
         {
+          "type": "SYMBOL",
+          "name": "alias_fn"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "bind_fn"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "set_fn"
+        },
+        {
           "type": "STRING",
-          "value": "bind"
+          "value": "echo"
         },
         {
           "type": "STRING",
@@ -486,6 +691,18 @@
         {
           "type": "STRING",
           "value": "wait"
+        },
+        {
+          "type": "STRING",
+          "value": "say"
+        },
+        {
+          "type": "STRING",
+          "value": "+fire"
+        },
+        {
+          "type": "STRING",
+          "value": "weapon"
         }
       ]
     }

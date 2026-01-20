@@ -27,8 +27,10 @@ export default grammar({
     // document
     _statement: $ => seq(
       choice(
+        $.alias,
         $.bind,
         $.command,
+        $.set,
       ),
       choice($.newline, $.terminator)
     ),
@@ -38,17 +40,44 @@ export default grammar({
       field("args", repeat($.command_argument)),
     ),
 
-    bind: $ => seq(
-      $.function,
-      $.bind_expr,
+    // alias
+    alias: $ => seq(
+      $.alias_fn,
+      choice(
+        seq($.single_quote, $.alias_name, $.single_quote),
+        seq($.double_quote, $.alias_name, $.double_quote),
+        $.alias_name
+      ),
       $.command_argument
     ),
-    bind_expr: $ => choice(
-      seq($.single_quote, $.bind_key, $.single_quote),
-      seq($.double_quote, $.bind_key, $.double_quote),
-      $.bind_key
+    alias_fn: $ => choice("alias", "tempalias"),
+    alias_name: $ => /[a-z0-9_.:-]+/i,
+
+    // bind
+    bind: $ => seq(
+      $.bind_fn,
+      choice(
+        seq($.single_quote, $.bind_key, $.single_quote),
+        seq($.double_quote, $.bind_key, $.double_quote),
+        $.bind_key
+      ),
+      $.command_argument
     ),
+    bind_fn: $ => "bind",
     bind_key: $ => /[a-z0-9][a-z0-9_]*/i,
+
+    // set
+    set: $ => seq(
+      $.set_fn,
+      choice(
+        seq($.single_quote, $.bind_key, $.single_quote),
+        seq($.double_quote, $.bind_key, $.double_quote),
+        $.bind_key
+      ),
+      $.command_argument,
+    ),
+    set_fn: $ => choice("set", "set_tp", "set_calc"),
+    set_name: $ => $.variable_name,
 
     // primitives
     terminator: $ => ";",
@@ -58,13 +87,15 @@ export default grammar({
     string: $ => /"[^"]*"/,
     unquoted_string: $ => /[^\s^;"]+/,
 
-    conditional: $ => choice("if", "then", "else", "isin"),
+    conditional: $ => choice("if", "then", "else", "isin", "if_exists", "or", "and"),
     command_prefix: $ => choice("+", "-", "/"),
     operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "="),
     bracket: $ => choice("(", ")", "[", "]", "{", "}"),
 
     number: $ => /-?\d+(\.\d+)?/,
     variable_name: $ => /[a-z0-9.:_-]+/i,
+
+    colored_text: $ => seq("&c", /[0-9a-f]{3}/i),
 
     command_argument: $ => choice(
       $.function,
@@ -82,12 +113,14 @@ export default grammar({
     ),
 
     expression_content: $ => choice(
+      /\r?\n/,
       $.conditional,
       $.terminator,
       $.operator,
       $.value,
       $.bracket,
-      $.function
+      $.function,
+      $.colored_text,
     ),
 
     single_quoted_string: $ => seq(
@@ -95,7 +128,6 @@ export default grammar({
       field("content", repeat($.expression_content)),
       $.single_quote,
     ),
-
 
     ref: $ => choice($.variable_ref, $.macro_ref),
     variable_ref: $ => seq("$", $.variable_name),
@@ -108,9 +140,15 @@ export default grammar({
     ),
 
     function: $ => choice(
-      "bind",
+      $.alias_fn,
+      $.bind_fn,
+      $.set_fn,
+      "echo",
       "quit",
-      "wait"
+      "wait",
+      "say",
+      "+fire",
+      "weapon",
     )
   }
 });

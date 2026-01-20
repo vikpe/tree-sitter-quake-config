@@ -1,33 +1,21 @@
-; (comment) @comment
+(comment) @comment
 
-; (command
-;   name: (_) @function
-; )
+[
+  (alias_name)
+  (bind_key)
+ ] @attribute
 
-; ; (bind
-; ;   function: (_) @function
-; ; )
+[
+  (function)
+] @function
 
-; ; (conditional) @keyword
+(conditional) @keyword
+(number) @number
+(operator) @keyword
+(bracket) @punctuation
+(ref) @variable
+(colored_text) @string.special
 
-; ; (command_without_args) @function
-
-; (bracket) @punctuation
-; (number) @number
-; (ref) @variable
-; (function) @function
-
-; (bind_key) @attribute
-
-; ; (expression
-; ;   content: (value)        @value
-; ;   content: (conditional)  @keyword
-; ;   content: (terminator)   @punctuation
-; ;   content: (operator)     @operator
-; ; )
-
-; (operator) @operator
-; (conditional) @keyword
 ; (single_quoted_string) @number
 ; ;
 ; ;
@@ -48,7 +36,7 @@
 ; ; (value) @number
 ; ; (variable) @variable
 ; ; [
-; ; (variable_ref)
+; ; (variable_value)
 ; ; (macro_ref)
 ; ; ] @number
 ; ; (operator) @operator

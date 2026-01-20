@@ -1,5 +1,41 @@
 [
   {
+    "type": "alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "alias_fn",
+          "named": true
+        },
+        {
+          "type": "alias_name",
+          "named": true
+        },
+        {
+          "type": "command_argument",
+          "named": true
+        },
+        {
+          "type": "double_quote",
+          "named": true
+        },
+        {
+          "type": "single_quote",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "alias_fn",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "bind",
     "named": true,
     "fields": {},
@@ -8,30 +44,15 @@
       "required": true,
       "types": [
         {
-          "type": "bind_expr",
+          "type": "bind_fn",
+          "named": true
+        },
+        {
+          "type": "bind_key",
           "named": true
         },
         {
           "type": "command_argument",
-          "named": true
-        },
-        {
-          "type": "function",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "bind_expr",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "bind_key",
           "named": true
         },
         {
@@ -47,6 +68,11 @@
   },
   {
     "type": "bracket",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "colored_text",
     "named": true,
     "fields": {}
   },
@@ -140,10 +166,14 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "bracket",
+          "named": true
+        },
+        {
+          "type": "colored_text",
           "named": true
         },
         {
@@ -172,10 +202,33 @@
   {
     "type": "function",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "alias_fn",
+          "named": true
+        },
+        {
+          "type": "bind_fn",
+          "named": true
+        },
+        {
+          "type": "set_fn",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "macro_ref",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "newline",
     "named": true,
     "fields": {}
   },
@@ -202,6 +255,42 @@
         }
       ]
     }
+  },
+  {
+    "type": "set",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bind_key",
+          "named": true
+        },
+        {
+          "type": "command_argument",
+          "named": true
+        },
+        {
+          "type": "double_quote",
+          "named": true
+        },
+        {
+          "type": "set_fn",
+          "named": true
+        },
+        {
+          "type": "single_quote",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "set_fn",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "single_quoted_string",
@@ -239,6 +328,10 @@
       "required": false,
       "types": [
         {
+          "type": "alias",
+          "named": true
+        },
+        {
           "type": "bind",
           "named": true
         },
@@ -248,6 +341,10 @@
         },
         {
           "type": "newline",
+          "named": true
+        },
+        {
+          "type": "set",
           "named": true
         },
         {
@@ -304,6 +401,10 @@
     "named": false
   },
   {
+    "type": "&c",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
@@ -317,6 +418,10 @@
   },
   {
     "type": "+",
+    "named": false
+  },
+  {
+    "type": "+fire",
     "named": false
   },
   {
@@ -348,8 +453,20 @@
     "named": false
   },
   {
-    "type": "bind",
+    "type": "alias",
     "named": false
+  },
+  {
+    "type": "alias_name",
+    "named": true
+  },
+  {
+    "type": "and",
+    "named": false
+  },
+  {
+    "type": "bind_fn",
+    "named": true
   },
   {
     "type": "bind_key",
@@ -365,6 +482,10 @@
     "named": true
   },
   {
+    "type": "echo",
+    "named": false
+  },
+  {
     "type": "else",
     "named": false
   },
@@ -373,24 +494,48 @@
     "named": false
   },
   {
-    "type": "isin",
+    "type": "if_exists",
     "named": false
   },
   {
-    "type": "newline",
-    "named": true
+    "type": "isin",
+    "named": false
   },
   {
     "type": "number",
     "named": true
   },
   {
+    "type": "or",
+    "named": false
+  },
+  {
     "type": "quit",
+    "named": false
+  },
+  {
+    "type": "say",
+    "named": false
+  },
+  {
+    "type": "set",
+    "named": false
+  },
+  {
+    "type": "set_calc",
+    "named": false
+  },
+  {
+    "type": "set_tp",
     "named": false
   },
   {
     "type": "single_quote",
     "named": true
+  },
+  {
+    "type": "tempalias",
+    "named": false
   },
   {
     "type": "terminator",
@@ -410,6 +555,10 @@
   },
   {
     "type": "wait",
+    "named": false
+  },
+  {
+    "type": "weapon",
     "named": false
   },
   {
