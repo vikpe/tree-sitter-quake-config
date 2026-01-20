@@ -16,75 +16,55 @@ export default grammar({
   ],
 
   conflicts: $ => [
-     [$.assignment, $.command]
+    // [$.setting_name, $.command]
   ],
 
   rules: {
     source_file: $ => repeat($._statement),
+    comment: $ => token(seq('//', /.*/)),
 
-      // Comments
-      comment: $ => token(seq('//', /.*/)),
-
-      _statement: $ => choice(
-        $.setting,
-        $.assignment,
-        $.alias,
-        $.command,
-        $.bind,
+    // document
+    _statement: $ => choice(
+      $.command,
+      $.setting,
+      $.set,
+      $.alias,
+      $.bind,
     ),
+
+    command: $ => $.command_name,
+
+    set: $ => seq($.set_function, $.set_key, $.set_value),
+    set_function: $ => choice("set", "set_tp"),
+    set_key: $ => $.label,
+    set_value: $ => $.value,
 
     setting: $ => seq(
       $.setting_name,
-      $.value
+      $.setting_value
     ),
-    setting_name: $ => /[a-zA-Z][a-zA-Z0-9_]*/,
+    setting_name: $ => $.command_name,
+    setting_value: $ => $.value,
 
-    // Assignment statements: set, set_tp, or simple identifier=value
-    assignment: $ => seq(
-      optional(choice('set', 'set_tp')),
-      $.identifier,
-      $.value
-    ),
+    alias: $ => seq($.alias_function, $.alias_key, $.alias_value),
+    alias_function: $ => choice("alias", "tempalias"),
+    alias_key: $ => $.label,
+    alias_value: $ => $.value,
 
-    // Binds
-    bind: $ => seq(
-      'bind',
-      $.bind_key,
-      $.value
-    ),
-    bind_key: $ => /[a-zA-Z][a-zA-Z0-9_]*/,
+    bind: $ => seq($.bind_function, $.bind_key, $.bind_value),
+    bind_function: $ => choice("bind", "tempbind"),
+    bind_key: $ => $.label,
+    bind_value: $ => $.value,
 
-    // Alias statements
-    alias: $ => seq(
-      'alias',
-      $.identifier,
-      $.value
-    ),
-
-    // Standalone commands
-    command: $ => $.identifier,
-
-    // Identifiers: letters, numbers, underscores, starting with letter or _
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-
-
-    // Values can be:
-    // - unquoted words (right, left, 12)
-    // - quoted strings ("right")
-    // - variables ($var)
-    // - quoted variables ("$var")
-    value: $ => choice(
-      $.quoted_variable,
-      $.variable,
-      $.string,
-      $.number,
-      $.identifier
-    ),
-
+    // primitives
     string: $ => /"[^"]*"/,
     number: $ => /-?\d+(\.\d+)?/,
-    variable: $ => /\$[a-zA-Z_][a-zA-Z0-9_]*/,
-    macro: $ => /\%[a-zA-Z][a-zA-Z0-9_]*/,
-    quoted_variable: $ => /"\$[a-zA-Z_][a-zA-Z0-9_]+"/
+    label: $ => /[a-z0-9_]+/i,
+    variable: $ => seq("$", $.label),
+
+    command_name: $ => /[a-z][a-z0-9_]*/i,
+
+    value: $ => choice($.number, $.string, $.label, $.variable),
+    quoted_value: $ => seq("\"", $.value, "\"")
   }
 });
