@@ -1,63 +1,5 @@
 [
   {
-    "type": "alias",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "alias_function",
-          "named": true
-        },
-        {
-          "type": "alias_key",
-          "named": true
-        },
-        {
-          "type": "alias_value",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "alias_function",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "alias_key",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "label",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "alias_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "value",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "bind",
     "named": true,
     "fields": {},
@@ -66,172 +8,222 @@
       "required": true,
       "types": [
         {
-          "type": "bind_function",
+          "type": "bind_expr",
           "named": true
         },
+        {
+          "type": "command_argument",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "bind_expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
         {
           "type": "bind_key",
           "named": true
         },
         {
-          "type": "bind_value",
+          "type": "double_quote",
+          "named": true
+        },
+        {
+          "type": "single_quote",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "bind_function",
+    "type": "bracket",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "bind_key",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "label",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "bind_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "value",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "command",
     "named": true,
+    "fields": {
+      "args": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "command_argument",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "unquoted_string",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "command_argument",
+    "named": true,
     "fields": {},
     "children": {
       "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "command_name",
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "value",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "set",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "set_function",
-          "named": true
-        },
-        {
-          "type": "set_key",
-          "named": true
-        },
-        {
-          "type": "set_value",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "set_function",
+    "type": "conditional",
     "named": true,
     "fields": {}
   },
   {
-    "type": "set_key",
+    "type": "expression",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "label",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "set_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "value",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "setting",
-    "named": true,
-    "fields": {},
+    "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expression_content",
+            "named": true
+          },
+          {
+            "type": "single_quoted_string",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "setting_name",
+          "type": "double_quote",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expression_content",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bracket",
           "named": true
         },
         {
-          "type": "setting_value",
+          "type": "conditional",
           "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "setting_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
+        },
         {
-          "type": "command_name",
+          "type": "function",
           "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "setting_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "terminator",
+          "named": true
+        },
         {
           "type": "value",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "macro_ref",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "ref",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "macro_ref",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "single_quoted_string",
+    "named": true,
+    "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "expression_content",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "single_quote",
           "named": true
         }
       ]
@@ -247,10 +239,6 @@
       "required": false,
       "types": [
         {
-          "type": "alias",
-          "named": true
-        },
-        {
           "type": "bind",
           "named": true
         },
@@ -259,11 +247,11 @@
           "named": true
         },
         {
-          "type": "set",
+          "type": "newline",
           "named": true
         },
         {
-          "type": "setting",
+          "type": "terminator",
           "named": true
         }
       ]
@@ -278,26 +266,22 @@
       "required": true,
       "types": [
         {
-          "type": "label",
-          "named": true
-        },
-        {
           "type": "number",
           "named": true
         },
         {
-          "type": "string",
+          "type": "ref",
           "named": true
         },
         {
-          "type": "variable",
+          "type": "variable_name",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "variable",
+    "type": "variable_ref",
     "named": true,
     "fields": {},
     "children": {
@@ -305,7 +289,7 @@
       "required": true,
       "types": [
         {
-          "type": "label",
+          "type": "variable_name",
           "named": true
         }
       ]
@@ -316,7 +300,51 @@
     "named": false
   },
   {
-    "type": "alias",
+    "type": "%",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
     "named": false
   },
   {
@@ -324,7 +352,7 @@
     "named": false
   },
   {
-    "type": "command_name",
+    "type": "bind_key",
     "named": true
   },
   {
@@ -333,7 +361,23 @@
     "extra": true
   },
   {
-    "type": "label",
+    "type": "double_quote",
+    "named": true
+  },
+  {
+    "type": "else",
+    "named": false
+  },
+  {
+    "type": "if",
+    "named": false
+  },
+  {
+    "type": "isin",
+    "named": false
+  },
+  {
+    "type": "newline",
     "named": true
   },
   {
@@ -341,23 +385,43 @@
     "named": true
   },
   {
-    "type": "set",
+    "type": "quit",
     "named": false
   },
   {
-    "type": "set_tp",
-    "named": false
-  },
-  {
-    "type": "string",
+    "type": "single_quote",
     "named": true
   },
   {
-    "type": "tempalias",
+    "type": "terminator",
+    "named": true
+  },
+  {
+    "type": "then",
     "named": false
   },
   {
-    "type": "tempbind",
+    "type": "unquoted_string",
+    "named": true
+  },
+  {
+    "type": "variable_name",
+    "named": true
+  },
+  {
+    "type": "wait",
+    "named": false
+  },
+  {
+    "type": "{",
+    "named": false
+  },
+  {
+    "type": "|",
+    "named": false
+  },
+  {
+    "type": "}",
     "named": false
   }
 ]
