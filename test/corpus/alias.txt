@@ -1,0 +1,49 @@
+==================
+alias
+==================
+alias foo ""
+alias foo ''
+alias foo disconnect
+alias foo "disconnect; wait; reconnect"
+---
+
+(source_file
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (fallback)))
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (fallback)))
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (fallback)))
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (fallback)))
+  (fallback)
+  (fallback))
+
+==================
+inline
+==================
+alias foo ""; alias bar ""
+---
+
+(source_file
+  (alias
+    (alias_name)
+    (alias_definition
+      (expression
+        (double_quote)
+        (double_quote))))
+  (fallback)
+  (alias
+    (alias_name)
+    (alias_definition
+      (expression
+        (double_quote)
+        (double_quote)))))

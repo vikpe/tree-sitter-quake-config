@@ -1,0 +1,12 @@
+==================
+expression
+==================
+alias foo   "if $health > 100 then foo else bar"
+---
+
+(source_file
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (expression
+        (double_quote)))))

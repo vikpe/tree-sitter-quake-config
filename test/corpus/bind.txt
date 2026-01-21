@@ -1,0 +1,22 @@
+==================
+bind
+==================
+bind mouse1 "+fire 7 3 2"
+bind mouse2 "+jump"
+bind e "say :)"
+---
+
+(source_file
+  (bind
+    key: (bind_key)
+    definition: (bind_definition)
+  )
+  (bind
+    key: (bind_key)
+    definition: (bind_definition)
+  )
+  (bind
+    key: (bind_key)
+    definition: (bind_definition)
+  )
+)

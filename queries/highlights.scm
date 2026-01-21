@@ -3,46 +3,31 @@
 [
   (alias_name)
   (bind_key)
+  (set_name)
  ] @attribute
 
 [
-  (function)
+  ; (function)
+  (alias_function)
+  (bind_function)
+  (set_function)
 ] @function
 
-(conditional) @keyword
+
+(conditional_expression
+  [
+    (if_key)
+    (then_key)
+    (else_key)
+  ] @keyword
+)
+
 (number) @number
-(operator) @keyword
-(bracket) @punctuation
-(ref) @variable
-(colored_text) @string.special
 
-; (single_quoted_string) @number
-; ;
-; ;
-; ;
-; ; (brackets) @operator
-; ; (expression
-; ;   (content) (_) @number
-; ; )
+(binary_expression
+  (operator) @operator
+)
 
-; ; (string) @string
-
-; ; [
-; ;   (alias_function)
-; ;   (bind)
-; ;   (set_function)
-; ; ] @variable.function
-
-; ; (value) @number
-; ; (variable) @variable
-; ; [
-; ; (variable_value)
-; ; (macro_ref)
-; ; ] @number
-; ; (operator) @operator
-
-; ; (alias) @function
-; ; (assignment) @function
-; ; (bind) @function
-; ; (setting_name) @keyword
-; ; (bind_key) @number
+; (punctuation) @punctuation
+[(variable_ref) (macro_ref)] @variable
+(color_def) @string.special

@@ -1,0 +1,42 @@
+==================
+end-to-end
+==================
+
+bind mouse1 "+fire 7 3 2"
+
+alias red "team red; color 4 4"
+
+set _nick "XantoM"
+
+---
+
+(source_file
+  (bind
+    key: (bind_key)
+    definition: (bind_definition))
+  (alias
+    name: (alias_name)
+    definition: (alias_definition
+      (expression
+        (double_quote)
+        (expression_content
+          (value
+            (variable_name)))
+        (expression_content
+          (value
+            (variable_name)))
+        (expression_content
+          (punctuation))
+        (expression_content
+          (value
+            (variable_name)))
+        (expression_content
+          (value
+            (number)))
+        (expression_content
+          (value
+            (number)))
+        (double_quote))))
+  (set
+    name: (set_name)
+    definition: (set_definition)))

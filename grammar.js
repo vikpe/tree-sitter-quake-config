@@ -1,5 +1,5 @@
 /**
- * @file tree-sitter grammar for Quake config files
+ * @file tree-sitter grammar for Quake configs
  * @author Viktor Persson <viktor.persson@arcsin.se>
  * @license MIT
  */
@@ -14,139 +14,156 @@ export default grammar({
     $.comment  // single-line comments
   ],
 
-  conflicts: $ => [],
+  conflicts: $ => [
+    // [$.value_expression, $.simple_expression],
+  ],
 
   rules: {
-    source_file: $ => repeat(seq(
-      $._statement,
-      optional($.newline)
-    )),
+    source_file: $ => repeat($._statement),
     comment: $ => token(seq('//', /.*/)),
-    newline: $ => /\r?\n/,
+
+    // primitives
+    number: $ => /-?\d+(\.\d+)?/,
+    double_quote: $ => "\"",
+    single_quote: $ => "'",
+    empty_string: $ => choice("\"\s*\"", "'\s*'"),
 
     // document
-    _statement: $ => seq(
-      choice(
-        $.alias,
-        $.bind,
-        $.command,
-        $.set,
-      ),
-      choice($.newline, $.terminator)
+    _statement: $ => choice(
+      $.alias,
+      $.bind,
+      $.set,
+      $.fallback
     ),
 
-    command: $ => seq(
-      field("name", $.unquoted_string),
-      field("args", repeat($.command_argument)),
-    ),
+    fallback: $ => /[^\s]+/,
 
     // alias
     alias: $ => seq(
-      $.alias_fn,
+      $.alias_function,
       choice(
-        seq($.single_quote, $.alias_name, $.single_quote),
-        seq($.double_quote, $.alias_name, $.double_quote),
-        $.alias_name
+        field("name", $.alias_name),
+        seq($.single_quote, field("name", $.alias_name), $.single_quote),
+        seq($.double_quote, field("name", $.alias_name), $.double_quote),
       ),
-      $.command_argument
+      field("definition", $.expression)
     ),
-    alias_fn: $ => choice("alias", "tempalias"),
-    alias_name: $ => /[a-z0-9_.:-]+/i,
+    alias_function: $ => choice("alias", "tempalias"),
+    alias_name: $ => /[^\s"']+/,
 
     // bind
     bind: $ => seq(
-      $.bind_fn,
+      $.bind_function,
       choice(
-        seq($.single_quote, $.bind_key, $.single_quote),
-        seq($.double_quote, $.bind_key, $.double_quote),
-        $.bind_key
+        field("key", $.bind_key),
+        seq($.single_quote, field("key", $.bind_key), $.single_quote),
+        seq($.double_quote, field("key", $.bind_key), $.double_quote),
       ),
-      $.command_argument
+      field("definition", $.expression)
     ),
-    bind_fn: $ => "bind",
-    bind_key: $ => /[a-z0-9][a-z0-9_]*/i,
+    bind_function: $ => "bind",
+    bind_key: $ => /[a-z0-9]+/,
 
     // set
     set: $ => seq(
-      $.set_fn,
+      $.set_function,
       choice(
-        seq($.single_quote, $.bind_key, $.single_quote),
-        seq($.double_quote, $.bind_key, $.double_quote),
-        $.bind_key
+        field("name", $.set_name),
+        seq($.single_quote, field("name", $.set_name), $.single_quote),
+        seq($.double_quote, field("name", $.set_name), $.double_quote),
       ),
-      $.command_argument,
+      field("definition", $.value_expression)
     ),
-    set_fn: $ => choice("set", "set_tp", "set_calc"),
-    set_name: $ => $.variable_name,
+    set_function: $ => choice("set", "set_tp"), // todo: set_calc
+    set_name: $ => /[^\s"']+/,
 
-    // primitives
-    terminator: $ => ";",
-    double_quote: $ => "\"",
-    single_quote: $ => "'",
-    quote: $ => choice($.single_quote, $.double_quote),
-    string: $ => /"[^"]*"/,
-    unquoted_string: $ => /[^\s^;"]+/,
-
-    conditional: $ => choice("if", "then", "else", "isin", "if_exists", "or", "and"),
-    command_prefix: $ => choice("+", "-", "/"),
-    operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "="),
-    bracket: $ => choice("(", ")", "[", "]", "{", "}"),
-
-    number: $ => /-?\d+(\.\d+)?/,
-    variable_name: $ => /[a-z0-9.:_-]+/i,
-
-    colored_text: $ => seq("&c", /[0-9a-f]{3}/i),
-
-    command_argument: $ => choice(
-      $.function,
-      $.value,
-      $.expression,
+    // value
+    value_expression: $ => choice(
+      $.empty_string,
+      $.number,
+      $.variable_ref,
+      $.macro_ref,
+      seq($.single_quote, $.value_string, $.single_quote),
+      seq($.double_quote, $.value_string, $.double_quote),
     ),
+    value_string: $ => repeat1(choice(
+      $.number,
+      $.variable_ref,
+      $.macro_ref,
+      $.color_def,
+      $.punctuation,
+    )),
 
-    expression: $ => seq(
-      $.double_quote,
-      field("content", repeat(choice(
-        $.expression_content,
-        $.single_quoted_string,
-      ))),
-      $.double_quote,
+    // expression
+    expression: $ => choice(
+      $.empty_string,
+      seq($.single_quote, repeat1($.expression_content), $.single_quote),
+      seq($.double_quote, repeat1($.expression_content), $.double_quote),
     ),
 
     expression_content: $ => choice(
-      /\r?\n/,
-      $.conditional,
-      $.terminator,
-      $.operator,
-      $.value,
-      $.bracket,
-      $.function,
-      $.colored_text,
+      $.conditional_expression,
+      $.simple_expression,
     ),
 
-    single_quoted_string: $ => seq(
-      $.single_quote,
-      field("content", repeat($.expression_content)),
-      $.single_quote,
-    ),
-
-    ref: $ => choice($.variable_ref, $.macro_ref),
-    variable_ref: $ => seq("$", $.variable_name),
-    macro_ref: $ => seq("%", /[a-z0-9]+/i),
-
-    value: $ => choice(
-      $.ref,
+    simple_expression: $ => choice(
       $.number,
-      $.variable_name
+      $.variable_ref,
+      $.macro_ref,
+      $.punctuation,
     ),
+
+    // ------------------------------------------------------------
+    // Conditional expressions
+    conditional_expression: $ => prec.right(seq(
+      $.if_key,
+      $.condition,
+      optional($.then_key),
+      $.simple_expression,
+      optional($.else_key),
+    )),
+
+    if_key: $ => token(/if/i),
+    then_key: $ => token(/then/i),
+    else_key: $ => token(/else/i),
+
+    condition: $ => choice(
+      $.parenthesized_condition,
+      $.binary_expression,
+      $.value_expression
+    ),
+
+    binary_expression: $ => prec.left(seq(
+      $.value_expression,
+      $.operator,
+      $.value_expression,
+      optional($.operator),
+    )),
+
+    parenthesized_condition: $ => seq("(", $.condition, ")"),
+
+    // -------------------
+
+    newline: $ => /\r?\n/,
+    conditional: $ => /if|if_exists|then|else/i,
+
+    operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "=", "==", "!=", "!", /or|and|isin/i),
+    punctuation: $ => choice("(", ")", "[", "]", "{", "}"),
+    color_def: $ => seq("&c", /[0-9a-f]{3}/i),
+    variable_ref: $ => seq("$", /[a-z0-9.:_-]+/i),
+    macro_ref: $ => seq("%", /[a-z0-9]+/i),
+    stringlike: $ =>  /[^\s]+/,
+
+    // string: $ => /"[^"]*"/,
 
     function: $ => choice(
-      $.alias_fn,
-      $.bind_fn,
-      $.set_fn,
-      "echo",
-      "quit",
-      "wait",
-      "say",
+      // $.alias_function,
+      // $.bind_function,
+      // $.set_function,
+      // "echo",
+      // "quit",
+      // "wait",
+      // "say",
       "+fire",
       "weapon",
     )
