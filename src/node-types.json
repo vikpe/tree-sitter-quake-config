@@ -1,14 +1,33 @@
 [
   {
+    "type": "alias_body",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "double_quoted_string",
+          "named": true
+        },
+        {
+          "type": "single_quoted_string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "alias_declaration",
     "named": true,
     "fields": {
-      "command": {
+      "body": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "command",
+            "type": "alias_body",
             "named": true
           }
         ]
@@ -56,7 +75,26 @@
     }
   },
   {
-    "type": "command",
+    "type": "binary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "value_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "double_quoted_string",
     "named": true,
     "fields": {},
     "children": {
@@ -68,18 +106,30 @@
           "named": true
         },
         {
-          "type": "instruction",
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "single_quoted_string",
           "named": true
         },
         {
           "type": "terminator",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "declaration",
+    "type": "else_clause",
     "named": true,
     "fields": {},
     "children": {
@@ -87,16 +137,81 @@
       "required": true,
       "types": [
         {
-          "type": "alias_declaration",
+          "type": "if_statement",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "instruction",
+    "type": "ezquake_macro_ref",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "function_param_ref",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "if_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "else_clause",
+          "named": true
+        },
+        {
+          "type": "label_like",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "qizmo_macro_ref",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "single_quoted_string",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "label_like",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "single_quote",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "source_file",
@@ -108,11 +223,7 @@
       "required": false,
       "types": [
         {
-          "type": "declaration",
-          "named": true
-        },
-        {
-          "type": "expression",
+          "type": "alias_declaration",
           "named": true
         },
         {
@@ -123,7 +234,162 @@
     }
   },
   {
+    "type": "user_variable_ref",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "value_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "single_quoted_string",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "variable_ref",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "ezquake_macro_ref",
+          "named": true
+        },
+        {
+          "type": "function_param_ref",
+          "named": true
+        },
+        {
+          "type": "qizmo_macro_ref",
+          "named": true
+        },
+        {
+          "type": "user_variable_ref",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "!",
+    "named": false
+  },
+  {
+    "type": "!=",
+    "named": false
+  },
+  {
+    "type": "$",
+    "named": false
+  },
+  {
+    "type": "%",
+    "named": false
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
+    "named": false
+  },
+  {
+    "type": "+",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": "/",
+    "named": false
+  },
+  {
+    "type": "<",
+    "named": false
+  },
+  {
+    "type": "=",
+    "named": false
+  },
+  {
+    "type": "==",
+    "named": false
+  },
+  {
+    "type": ">",
+    "named": false
+  },
+  {
+    "type": "A",
+    "named": false
+  },
+  {
+    "type": "B",
+    "named": false
+  },
+  {
+    "type": "C",
+    "named": false
+  },
+  {
+    "type": "a",
+    "named": false
+  },
+  {
     "type": "alias",
+    "named": false
+  },
+  {
+    "type": "ammo",
+    "named": false
+  },
+  {
+    "type": "armor",
+    "named": false
+  },
+  {
+    "type": "armortype",
+    "named": false
+  },
+  {
+    "type": "b",
+    "named": false
+  },
+  {
+    "type": "bestammo",
+    "named": false
+  },
+  {
+    "type": "bestweapon",
+    "named": false
+  },
+  {
+    "type": "c",
     "named": false
   },
   {
@@ -136,7 +402,23 @@
     "named": true
   },
   {
-    "type": "expression",
+    "type": "else",
+    "named": false
+  },
+  {
+    "type": "health",
+    "named": false
+  },
+  {
+    "type": "label_like",
+    "named": true
+  },
+  {
+    "type": "number",
+    "named": true
+  },
+  {
+    "type": "single_quote",
     "named": true
   },
   {
@@ -146,5 +428,13 @@
   {
     "type": "terminator",
     "named": true
+  },
+  {
+    "type": "then",
+    "named": false
+  },
+  {
+    "type": "|",
+    "named": false
   }
 ]
