@@ -9,6 +9,6 @@ generate_and_highlight() {
 }
 
 generate_and_highlight
-while inotifywait -q -e modify "grammar.js" "examples/test.cfg" "queries/highlights.scm"; do
+while inotifywait -q -e modify "config.json" "grammar.js" "examples/test.cfg" "queries/highlights.scm"; do
     generate_and_highlight
 done
