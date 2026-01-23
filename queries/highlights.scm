@@ -1,16 +1,28 @@
 (comment) @comment
 (ERROR) @error
 
-(alias_declaration
-  function: (_) @function
-  name: (_) @attribute
+(alias_name) @number
+
+(alias_declaration_complex (alias_function) @keyword)
+(alias_declaration_simple (alias_function) @keyword)
+(bind_declaration_complex
+  (bind_function) @keyword
+  (bind_key (keyname)) @variable.parameter
 )
 
-(variable_ref) @variable
+(bind_declaration_simple (bind_function)) @keyword
+
+; (bind_function
+;   key: (keyname) @variable.parameter
+; )
+
+; (alias_name) @string
+(user_variable_ref) @variable
 
 (number) @number
 (operator) @operator
 
+(function_name) @function
 
 (if_statement
   [

@@ -9,7 +9,8 @@
       "file-types": ["cfg"],
       "injection-regex": "^quake_config$",
       "class-name": "TreeSitterQuakeConfig",
-      "highlights": "queries/highlights.scm"
+      "highlights": "queries/highlights.scm",
+      "tags": "queries/tags.scm"
     }
   ],
   "metadata": {
@@ -34,7 +35,7 @@
     "java": false,
     "node": false,
     "python": false,
-    "rust": false,
+    "rust": true,
     "swift": false,
     "zig": false
   }
