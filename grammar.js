@@ -82,6 +82,7 @@ export default grammar({
     terminator: $ => ";",
 
     // primitives
+    alpha_num: $ => /[a-z0-9_.]/i,
     number: $ => /-?\d+(\.\d+)?/,
     double_quote: $ => "\"",
     single_quote: $ => "'",
@@ -95,44 +96,51 @@ export default grammar({
     ),
     function_param_ref: $ => seq('%', /[0-9]/),
     user_variable_ref: $ => seq("$", /[a-z0-9_]+/i),
-    qizmo_macro_ref: $ => seq('%', choice('a','b','c','A','B','C')),
+    qizmo_macro_ref: $ => seq('%', choice('a', 'b', 'c', 'A', 'B', 'C')),
     ezquake_macro_ref: $ => seq("$", choice("ammo", "armor", "armortype", "bestammo", "bestweapon", "health")),
-
-    label_like: $ => /[a-z0-9_().><]+/i,
 
     single_quoted_string: $ => seq(
       $.single_quote,
       repeat(choice(
         $.variable_ref,
         $.number,
-        $.label_like,
+        $.alpha_num,
       )),
       $.single_quote
     ),
 
     double_quoted_string: $ => seq(
       $.double_quote,
-      repeat(choice(
-        $.if_statement,
-        $.single_quoted_string,
-        $.variable_ref,
-        $.number,
-        $.terminator,
-      )),
+      repeat(
+        seq(
+          choice(
+            $.if_statement,
+            $.single_quoted_string,
+            $.variable_ref,
+            $.number,
+            $.alpha_num,
+          ),
+          optional($.terminator),
+        ),
+      ),
       $.double_quote,
     ),
 
-    else_clause: $ => seq("else", $.if_statement),
+    if_statement: $ => prec.right(seq(
+      $.if_keyword,
+      seq("(", $.binary_expression, ")"),
+      optional($.then_keyword),
+      repeat(choice(
+        $.alpha_num,
+        $.variable_ref,
+        $.alpha_num,
+      )),
+      optional($.else_keyword),
+    )),
 
-    if_statement: $ => seq(
-      /if/i,
-      "(",
-      $.binary_expression,
-      ")",
-      optional("then"),
-      $.label_like,
-      optional($.else_clause),
-    ),
+    if_keyword: $ => "if",
+    then_keyword: $ => "then",
+    else_keyword: $ => "else",
 
     binary_expression: $ => seq(
       $.value_expression,
@@ -146,6 +154,6 @@ export default grammar({
       $.variable_ref
     ),
 
-    operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "=", "==", "!=", "!", /or|and|isin/i),
+    operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "=", "==", "!=", "!", / or | and | isin | !isin /i),
   }
 });

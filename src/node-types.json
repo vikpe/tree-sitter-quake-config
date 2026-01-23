@@ -102,6 +102,10 @@
       "required": true,
       "types": [
         {
+          "type": "alpha_num",
+          "named": true
+        },
+        {
           "type": "double_quote",
           "named": true
         },
@@ -129,21 +133,6 @@
     }
   },
   {
-    "type": "else_clause",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "if_statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "ezquake_macro_ref",
     "named": true,
     "fields": {}
@@ -162,15 +151,27 @@
       "required": true,
       "types": [
         {
+          "type": "alpha_num",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
         {
-          "type": "else_clause",
+          "type": "else_keyword",
           "named": true
         },
         {
-          "type": "label_like",
+          "type": "if_keyword",
+          "named": true
+        },
+        {
+          "type": "then_keyword",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
           "named": true
         }
       ]
@@ -195,7 +196,7 @@
       "required": true,
       "types": [
         {
-          "type": "label_like",
+          "type": "alpha_num",
           "named": true
         },
         {
@@ -365,6 +366,10 @@
     "named": false
   },
   {
+    "type": "alpha_num",
+    "named": true
+  },
+  {
     "type": "ammo",
     "named": false
   },
@@ -402,15 +407,15 @@
     "named": true
   },
   {
-    "type": "else",
-    "named": false
+    "type": "else_keyword",
+    "named": true
   },
   {
     "type": "health",
     "named": false
   },
   {
-    "type": "label_like",
+    "type": "if_keyword",
     "named": true
   },
   {
@@ -430,8 +435,8 @@
     "named": true
   },
   {
-    "type": "then",
-    "named": false
+    "type": "then_keyword",
+    "named": true
   },
   {
     "type": "|",

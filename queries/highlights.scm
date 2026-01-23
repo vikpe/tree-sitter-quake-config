@@ -3,12 +3,19 @@
 
 (alias_declaration
   function: (_) @function
-  name: (_) @keyword
+  name: (_) @attribute
 )
 
-(user_variable_ref) @variable
-
-(variable_ref) @keyword
+(variable_ref) @variable
 
 (number) @number
-(if_statement) @type
+(operator) @operator
+
+
+(if_statement
+  [
+    (if_keyword)
+    (then_keyword)
+    (else_keyword)
+  ] @keyword
+)
