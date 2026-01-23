@@ -3,14 +3,14 @@
 
 (alias_name) @number
 
-(alias_declaration_complex (alias_function) @keyword)
-(alias_declaration_simple (alias_function) @keyword)
-(bind_declaration_complex
+(alias_declaration (alias_function) @keyword)
+(alias_declaration_sub (alias_function) @keyword)
+(bind_declaration
   (bind_function) @keyword
   (bind_key (keyname)) @variable.parameter
 )
 
-(bind_declaration_simple (bind_function)) @keyword
+(bind_declaration_sub (bind_function)) @keyword
 
 ; (bind_function
 ;   key: (keyname) @variable.parameter

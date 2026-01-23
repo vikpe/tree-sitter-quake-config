@@ -15,8 +15,8 @@ export default grammar({
   ],
 
   conflicts: $ => [
-    [$._statement, $.alias_declaration_simple],
-    [$._statement, $.bind_declaration_simple],
+    // [$._statement, $.alias_declaration_sub],
+    // [$._statement, $.bind_declaration_sub],
   ],
 
   rules: {
@@ -26,23 +26,21 @@ export default grammar({
     // document
     _statement: $ => choice(
       $.terminator,
-      $._statement_complex,
-      $._statement_simple,
-    ),
-
-    _statement_complex: $ => choice(
-      $.alias_declaration_complex,
-      $.bind_declaration_complex,
-      $.function_call_complex,
+      $.alias_declaration,
+      $.bind_declaration,
+      $.function_call,
       $.if_statement,
     ),
 
-    _statement_simple: $ => choice(
-      $.alias_declaration_simple,
-      $.bind_declaration_simple,
-      $.function_call_simple,
+    _statement_sub: $ => choice(
+      $.terminator,
+      $.alias_declaration_sub,
+      $.bind_declaration_sub,
+      $.function_call_sub,
+      $.if_statement,
     ),
 
+    // primitives
     _newline: $ => /\r?\n/,
     _whitespace: $ => /[ \t]+/,
     _double_quote: $ => token("\""),
@@ -52,57 +50,67 @@ export default grammar({
     alias_function: $ => choice("alias", "temp_alias"),
     alias_name: $ => /[^"\s]+/,
 
-    alias_declaration_simple: $ => seq(
+    alias_declaration: $ => seq(
       field("function", $.alias_function),
-      $._whitespace,
-      field("name", $.alias_name),
-      $._whitespace,
-      field("body", $._statement_simple),
-    ),
-
-    alias_declaration_complex: $ => seq(
-      field("function", $.alias_function),
-      $._whitespace,
       choice(
         seq($._double_quote, field("name", $.alias_name), $._double_quote),
         field("name", $.alias_name),
       ),
-      $._whitespace,
       field("body", choice($._statement, $.expression)),
+    ),
+
+    alias_declaration_sub: $ => seq(
+      field("function", $.alias_function),
+      field("name", $.alias_name),
+      field("body", $._statement_sub),
     ),
 
     // bind
     bind_function: $ => token("bind"),
     bind_key: $ => choice($.keyname, $.keyname_fallback),
 
-    keyname: $ => token(choice(
-      /mouse[1-8]/i,
-      /[\da-z]/i,
-      /f[1-9]/i,
-      /f1[0-5]/i,
-      /space/i,
-    )),
-    keyname_fallback: $ => /[^\s"]+/,
-
-    bind_declaration_complex: $ => seq(
+    bind_declaration: $ => seq(
       field("function", $.bind_function),
-      $._bind_key_expr,
-      field("expression", choice($._statement, $.expression)),
-    ),
-
-    bind_declaration_simple: $ => seq(
-      field("function", $.bind_function),
-      $._bind_key_expr,
-      field("expression", $._statement_simple),
-    ),
-
-    _bind_key_expr: $ => seq(
-      $._whitespace,
       choice(
         field("key", $.bind_key),
         seq($._double_quote, field("key", $.bind_key), $._double_quote),
       ),
-      $._whitespace,
+      field("expression", choice($._statement, $.expression)),
+    ),
+
+    bind_declaration_sub: $ => seq(
+      field("function", $.bind_function),
+      field("key", $.bind_key),
+      field("expression", $._statement_sub),
+    ),
+
+    // expression
+    expression: $ => seq(
+      $._double_quote,
+      repeat(choice(
+        $._statement_sub,
+          //$.if_fallback,
+      )),
+      $._double_quote,
+    ),
+
+    // function call
+    function_call: $ => prec.left(seq(
+      field("name", $.function_name),
+      field("args", repeat($.function_arg)),
+    )),
+    function_arg: $ => choice(
+      $.user_variable_ref,
+      $.function_call,
+    ),
+
+    function_call_sub: $ => seq(
+      field("name", $.function_name),
+      field("args", repeat($.function_arg_sub)),
+    ),
+    function_arg_sub: $ => choice(
+      $.user_variable_ref,
+      /[a-z]+/i
     ),
 
     // primitives
@@ -132,33 +140,24 @@ export default grammar({
       $._single_quote,
     ),
 
-    expression: $ => seq(
-      $._double_quote,
-      repeat(choice(
-          $._statement_simple,
-          //$.if_fallback,
-      )),
-      $._double_quote,
-    ),
-
+    // if statement
     if_statement: $ => prec.right(seq(
       $.if_keyword,
       seq("(", $.binary_expression, ")"),
       $.then_keyword,
       repeat(choice(
-        $.bind_declaration_simple,
-        $.function_call_simple,
+        $._statement_sub,
         // $.variable_ref,
         // $.if_fallback,
       )),
       optional($.else_keyword),
     )),
 
-    if_fallback: $ => /[^; ]+/,
+    if_fallback: $ => token(/[^; ]+/),
 
-    if_keyword: $ => "if",
-    then_keyword: $ => "then",
-    else_keyword: $ => "else",
+    if_keyword: $ => token("if"),
+    then_keyword: $ => token("then"),
+    else_keyword: $ => token("else"),
 
     binary_expression: $ => seq(
       $.value_expression,
@@ -174,23 +173,18 @@ export default grammar({
 
     operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "==", "=", "!=", "!", "=~", "!~", / or | and | !isin | isin /i)),
 
-    function_call_simple: $ => seq(
-      field("name", $.function_name),
-      optional(field("args", repeat($.arg_simple))),
-    ),
-    arg_simple: $ => choice(
-      $.user_variable_ref,
-    ),
 
-    function_call_complex: $ => prec.left(seq(
-      field("name", $.function_name),
-      $._whitespace,
-      field("args", repeat($.arg_complex)),
+
+
+    // keywords
+    keyname: $ => token(choice(
+      /mouse[1-8]/i,
+      /[\da-z]/i,
+      /f[1-9]/i,
+      /f1[0-5]/i,
+      /space/i,
     )),
-    arg_complex: $ => choice(
-      $.user_variable_ref,
-      $.function_call_complex,
-    ),
+    keyname_fallback: $ => /[^\s"]+/,
 
     function_name: $ => token(choice(
       "echo",
