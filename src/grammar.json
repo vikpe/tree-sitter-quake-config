@@ -120,20 +120,40 @@
       ]
     },
     "terminator": {
-      "type": "STRING",
-      "value": ";"
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": ";"
+      }
+    },
+    "alpha_num": {
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "[a-z0-9_.]",
+        "flags": "i"
+      }
     },
     "number": {
-      "type": "PATTERN",
-      "value": "-?\\d+(\\.\\d+)?"
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "-?\\d+(\\.\\d+)?"
+      }
     },
     "double_quote": {
-      "type": "STRING",
-      "value": "\""
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "\""
+      }
     },
     "single_quote": {
-      "type": "STRING",
-      "value": "'"
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "'"
+      }
     },
     "variable_ref": {
       "type": "CHOICE",
@@ -157,69 +177,27 @@
       ]
     },
     "function_param_ref": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "%"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[0-9]"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "%[0-9]"
+      }
     },
     "user_variable_ref": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "$"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[a-z0-9_]+",
-          "flags": "i"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "\\$[a-z0-9_]+",
+        "flags": "i"
+      }
     },
     "qizmo_macro_ref": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "%"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "a"
-            },
-            {
-              "type": "STRING",
-              "value": "b"
-            },
-            {
-              "type": "STRING",
-              "value": "c"
-            },
-            {
-              "type": "STRING",
-              "value": "A"
-            },
-            {
-              "type": "STRING",
-              "value": "B"
-            },
-            {
-              "type": "STRING",
-              "value": "C"
-            }
-          ]
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "%[abc]",
+        "flags": "i"
+      }
     },
     "ezquake_macro_ref": {
       "type": "SEQ",
@@ -258,11 +236,6 @@
           ]
         }
       ]
-    },
-    "alpha_num": {
-      "type": "PATTERN",
-      "value": "[a-z0-9_.]",
-      "flags": "i"
     },
     "single_quoted_string": {
       "type": "SEQ",
@@ -476,58 +449,61 @@
       ]
     },
     "operator": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "+"
-        },
-        {
-          "type": "STRING",
-          "value": "-"
-        },
-        {
-          "type": "STRING",
-          "value": "/"
-        },
-        {
-          "type": "STRING",
-          "value": "*"
-        },
-        {
-          "type": "STRING",
-          "value": ">"
-        },
-        {
-          "type": "STRING",
-          "value": "<"
-        },
-        {
-          "type": "STRING",
-          "value": "|"
-        },
-        {
-          "type": "STRING",
-          "value": "="
-        },
-        {
-          "type": "STRING",
-          "value": "=="
-        },
-        {
-          "type": "STRING",
-          "value": "!="
-        },
-        {
-          "type": "STRING",
-          "value": "!"
-        },
-        {
-          "type": "PATTERN",
-          "value": " or | and | isin | !isin ",
-          "flags": "i"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "+"
+          },
+          {
+            "type": "STRING",
+            "value": "-"
+          },
+          {
+            "type": "STRING",
+            "value": "/"
+          },
+          {
+            "type": "STRING",
+            "value": "*"
+          },
+          {
+            "type": "STRING",
+            "value": ">"
+          },
+          {
+            "type": "STRING",
+            "value": "<"
+          },
+          {
+            "type": "STRING",
+            "value": "|"
+          },
+          {
+            "type": "STRING",
+            "value": "="
+          },
+          {
+            "type": "STRING",
+            "value": "=="
+          },
+          {
+            "type": "STRING",
+            "value": "!="
+          },
+          {
+            "type": "STRING",
+            "value": "!"
+          },
+          {
+            "type": "PATTERN",
+            "value": " or | and | isin | !isin ",
+            "flags": "i"
+          }
+        ]
+      }
     }
   },
   "extras": [

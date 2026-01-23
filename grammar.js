@@ -79,13 +79,13 @@ export default grammar({
     //     $.double_quote
     //   ),
     // ),
-    terminator: $ => ";",
+    terminator: $ => token(";"),
 
     // primitives
-    alpha_num: $ => /[a-z0-9_.]/i,
-    number: $ => /-?\d+(\.\d+)?/,
-    double_quote: $ => "\"",
-    single_quote: $ => "'",
+    alpha_num: $ => token(/[a-z0-9_.]/i),
+    number: $ => token(/-?\d+(\.\d+)?/),
+    double_quote: $ => token("\""),
+    single_quote: $ => token("'"),
 
     // variable references
     variable_ref: $ => choice(
@@ -94,9 +94,9 @@ export default grammar({
       $.qizmo_macro_ref,
       $.ezquake_macro_ref,
     ),
-    function_param_ref: $ => seq('%', /[0-9]/),
-    user_variable_ref: $ => seq("$", /[a-z0-9_]+/i),
-    qizmo_macro_ref: $ => seq('%', choice('a', 'b', 'c', 'A', 'B', 'C')),
+    function_param_ref: $ => token(/%[0-9]/),
+    user_variable_ref: $ => token(/\$[a-z0-9_]+/i),
+    qizmo_macro_ref: $ => token(/%[abc]/i),
     ezquake_macro_ref: $ => seq("$", choice("ammo", "armor", "armortype", "bestammo", "bestweapon", "health")),
 
     single_quoted_string: $ => seq(
@@ -154,6 +154,6 @@ export default grammar({
       $.variable_ref
     ),
 
-    operator: $ => choice("+", "-", "/", "*", ">", "<", "|", "=", "==", "!=", "!", / or | and | isin | !isin /i),
+    operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "=", "==", "!=", "!", / or | and | isin | !isin /i)),
   }
 });

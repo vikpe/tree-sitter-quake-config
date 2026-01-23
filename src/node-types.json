@@ -138,11 +138,6 @@
     "fields": {}
   },
   {
-    "type": "function_param_ref",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "if_statement",
     "named": true,
     "fields": {},
@@ -176,16 +171,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "operator",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "qizmo_macro_ref",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "single_quoted_string",
@@ -233,11 +218,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "user_variable_ref",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "value_expression",
@@ -290,19 +270,7 @@
     }
   },
   {
-    "type": "!",
-    "named": false
-  },
-  {
-    "type": "!=",
-    "named": false
-  },
-  {
     "type": "$",
-    "named": false
-  },
-  {
-    "type": "%",
     "named": false
   },
   {
@@ -311,54 +279,6 @@
   },
   {
     "type": ")",
-    "named": false
-  },
-  {
-    "type": "*",
-    "named": false
-  },
-  {
-    "type": "+",
-    "named": false
-  },
-  {
-    "type": "-",
-    "named": false
-  },
-  {
-    "type": "/",
-    "named": false
-  },
-  {
-    "type": "<",
-    "named": false
-  },
-  {
-    "type": "=",
-    "named": false
-  },
-  {
-    "type": "==",
-    "named": false
-  },
-  {
-    "type": ">",
-    "named": false
-  },
-  {
-    "type": "A",
-    "named": false
-  },
-  {
-    "type": "B",
-    "named": false
-  },
-  {
-    "type": "C",
-    "named": false
-  },
-  {
-    "type": "a",
     "named": false
   },
   {
@@ -382,19 +302,11 @@
     "named": false
   },
   {
-    "type": "b",
-    "named": false
-  },
-  {
     "type": "bestammo",
     "named": false
   },
   {
     "type": "bestweapon",
-    "named": false
-  },
-  {
-    "type": "c",
     "named": false
   },
   {
@@ -411,6 +323,10 @@
     "named": true
   },
   {
+    "type": "function_param_ref",
+    "named": true
+  },
+  {
     "type": "health",
     "named": false
   },
@@ -420,6 +336,14 @@
   },
   {
     "type": "number",
+    "named": true
+  },
+  {
+    "type": "operator",
+    "named": true
+  },
+  {
+    "type": "qizmo_macro_ref",
     "named": true
   },
   {
@@ -439,7 +363,7 @@
     "named": true
   },
   {
-    "type": "|",
-    "named": false
+    "type": "user_variable_ref",
+    "named": true
   }
 ]
