@@ -15,46 +15,40 @@ export default grammar({
   ],
 
   conflicts: $ => [
-    // [$._statement, $.alias_declaration_sub],
-    // [$._statement, $.bind_declaration_sub],
+    // [$._statement, $.expr_alias_declaration],
+    // [$._statement, $.expr_bind_declaration],
   ],
 
   rules: {
-    source_file: $ => repeat($._statement),
-    comment: $ => token(seq('//', /.*/)),
+    source_file: $ => repeat(seq(
+      $._statement,
+      $._statement_terminator
+    )),
 
-    // document
+    // primitives
+    comment: $ => token(seq('//', /.*/)),
+    number: $ => token(/-?\d+(\.\d+)?/),
+    _terminator: $ => token(";"),
+    _newline: $ => token(/\r?\n/),
+    _whitespace: $ => token(/[ \t]+/),
+    _single_quote: $ => token("'"),
+    _double_quote: $ => token("\""),
+    _statement_terminator: $ => choice($._terminator, $._newline),
+
+    // top level statements
     _statement: $ => choice(
-      $._newline,
-      $.terminator,
       $.alias_declaration,
       $.bind_declaration,
       $.function_call,
       $.if_statement,
       $.plus_command,
+      $.unknown_statement
     ),
-
-    _statement_sub: $ => choice(
-      $._newline,
-      $.terminator,
-      $.alias_declaration_sub,
-      $.bind_declaration_sub,
-      $.function_call_sub,
-      $.if_statement,
-      $.plus_command,
-    ),
-
-    // primitives
-    terminator: $ => token(";"),
-    number: $ => token(/-?\d+(\.\d+)?/),
-    _newline: $ => token(/\r?\n/),
-    _whitespace: $ => token(/[ \t]+/),
-    _double_quote: $ => token("\""),
-    _single_quote: $ => token("'"),
+    unknown_statement: $ => seq(repeat1(/[^;\r\n]/)),
 
     // alias
     alias_function: $ => choice("alias", "temp_alias"),
-    alias_name: $ => /[^"\s]+/,
+    alias_name: $ => token(/[^"\s]+/),
 
     alias_declaration: $ => seq(
       field("function", $.alias_function),
@@ -65,12 +59,6 @@ export default grammar({
       ),
       $._whitespace,
       field("body", choice($._statement, $.expression)),
-    ),
-
-    alias_declaration_sub: $ => seq(
-      field("function", $.alias_function),
-      field("name", $.alias_name),
-      field("body", $._statement_sub),
     ),
 
     // bind
@@ -86,19 +74,6 @@ export default grammar({
       field("expression", choice($._statement, $.expression)),
     ),
 
-    bind_declaration_sub: $ => seq(
-      field("function", $.bind_function),
-      field("key", $.bind_key),
-      field("expression", $._statement_sub),
-    ),
-
-    // expression
-    expression: $ => seq(
-      $._double_quote,
-      repeat($._statement_sub),
-      $._double_quote,
-    ),
-
     // function call
     function_call: $ => seq(
       field("name", $.function_name),
@@ -109,22 +84,13 @@ export default grammar({
       $.double_quoted_string,
     ),
 
-    function_call_sub: $ => seq(
-      field("name", $.function_name),
-      field("args", repeat($.function_arg_sub)),
-    ),
-    function_arg_sub: $ => choice(
-      $._value_expression,
-      token(/[^']/),
-    ),
-
     // if statement
     if_statement: $ => prec.right(seq(
       $.if_keyword,
       seq("(", $.binary_expression, ")"),
       $.then_keyword,
-      repeat($._statement_sub),
-      optional($.else_keyword),
+      $._statement,
+      optional(seq($.else_keyword, $._statement)),
     )),
 
     if_keyword: $ => token("if"),
@@ -138,6 +104,50 @@ export default grammar({
     ),
 
     operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "==", "=", "!=", "!", "=~", "!~", / or | and | !isin | isin /i)),
+
+    // expression
+    expression: $ => seq(
+       $._double_quote,
+      repeat(seq(
+          $.expression_statement,
+          $._statement_terminator
+      )),
+      $._double_quote,
+    ),
+    expression_statement: $ => choice(
+      $.expr_alias_declaration,
+      $.expr_bind_declaration,
+      $.expr_function_call,
+      // $.if_statement,
+      // $.plus_command,
+      $.unknown_expression_statement,
+    ),
+    unknown_expression_statement: $ => seq(repeat1(/[^;"\r\n]/)),
+
+    expr_alias_declaration: $ => seq(
+      field("function", $.alias_function),
+       $._whitespace,
+      field("name", $.alias_name),
+       $._whitespace,
+      field("body", $.expression_statement),
+    ),
+
+    expr_bind_declaration: $ => seq(
+      field("function", $.bind_function),
+      field("key", $.bind_key),
+      field("expression", $.expression_statement),
+    ),
+
+    expr_function_call: $ => seq(
+      field("name", $.function_name),
+      field("args", repeat($.expr_function_arg)),
+    ),
+    expr_function_arg: $ => choice(
+      $._value_expression,
+      token(/[^']/),
+    ),
+
+
 
     // variable references
     _value_expression: $ => choice(

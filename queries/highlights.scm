@@ -1,16 +1,17 @@
 (comment) @comment
 (ERROR) @error
+(unknown_statement) @error
 
 (alias_name) @number
 
 (alias_declaration (alias_function) @keyword)
-(alias_declaration_sub (alias_function) @keyword)
+(expr_alias_declaration (alias_function) @keyword)
 (bind_declaration
   (bind_function) @keyword
   (bind_key (keyname)) @variable.parameter
 )
 
-(bind_declaration_sub (bind_function)) @keyword
+(expr_bind_declaration (bind_function)) @keyword
 
 ; (bind_function
 ;   key: (keyname) @variable.parameter
@@ -25,7 +26,7 @@
 (plus_command) @string.special
 
 (number) @number
-(operator) @operator
+; (operator) @operator
 
 (function_name) @function
 
