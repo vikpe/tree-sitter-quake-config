@@ -25,24 +25,30 @@ export default grammar({
 
     // document
     _statement: $ => choice(
+      $._newline,
       $.terminator,
       $.alias_declaration,
       $.bind_declaration,
       $.function_call,
       $.if_statement,
+      $.plus_command,
     ),
 
     _statement_sub: $ => choice(
+      $._newline,
       $.terminator,
       $.alias_declaration_sub,
       $.bind_declaration_sub,
       $.function_call_sub,
       $.if_statement,
+      $.plus_command,
     ),
 
     // primitives
-    _newline: $ => /\r?\n/,
-    _whitespace: $ => /[ \t]+/,
+    terminator: $ => token(";"),
+    number: $ => token(/-?\d+(\.\d+)?/),
+    _newline: $ => token(/\r?\n/),
+    _whitespace: $ => token(/[ \t]+/),
     _double_quote: $ => token("\""),
     _single_quote: $ => token("'"),
 
@@ -52,10 +58,12 @@ export default grammar({
 
     alias_declaration: $ => seq(
       field("function", $.alias_function),
+      $._whitespace,
       choice(
         seq($._double_quote, field("name", $.alias_name), $._double_quote),
         field("name", $.alias_name),
       ),
+      $._whitespace,
       field("body", choice($._statement, $.expression)),
     ),
 
@@ -87,21 +95,18 @@ export default grammar({
     // expression
     expression: $ => seq(
       $._double_quote,
-      repeat(choice(
-        $._statement_sub,
-          //$.if_fallback,
-      )),
+      repeat($._statement_sub),
       $._double_quote,
     ),
 
     // function call
-    function_call: $ => prec.left(seq(
+    function_call: $ => seq(
       field("name", $.function_name),
       field("args", repeat($.function_arg)),
-    )),
+    ),
     function_arg: $ => choice(
-      $.user_variable_ref,
-      $.function_call,
+      $._value_expression,
+      $.double_quoted_string,
     ),
 
     function_call_sub: $ => seq(
@@ -109,35 +114,8 @@ export default grammar({
       field("args", repeat($.function_arg_sub)),
     ),
     function_arg_sub: $ => choice(
-      $.user_variable_ref,
-      /[a-z]+/i
-    ),
-
-    // primitives
-    terminator: $ => token(";"),
-    alpha_num: $ => token(/[a-z0-9_.]/i),
-    number: $ => token(/-?\d+(\.\d+)?/),
-
-    // variable references
-    variable_ref: $ => choice(
-      $.function_param_ref,
-      $.user_variable_ref,
-      $.qizmo_macro_ref,
-      $.ezquake_macro_ref,
-    ),
-    function_param_ref: $ => token(/%[0-9]/),
-    user_variable_ref: $ => token(/\$[a-z0-9_]+/i),
-    qizmo_macro_ref: $ => token(/%[abc]/i),
-    ezquake_macro_ref: $ => seq("$", choice("ammo", "armor", "armortype", "bestammo", "bestweapon", "health")),
-
-    single_quoted_string: $ => seq(
-      $._single_quote,
-      repeat(choice(
-        $.variable_ref,
-        $.number,
-        $.alpha_num,
-      )),
-      $._single_quote,
+      $._value_expression,
+      token(/[^']/),
     ),
 
     // if statement
@@ -145,36 +123,60 @@ export default grammar({
       $.if_keyword,
       seq("(", $.binary_expression, ")"),
       $.then_keyword,
-      repeat(choice(
-        $._statement_sub,
-        // $.variable_ref,
-        // $.if_fallback,
-      )),
+      repeat($._statement_sub),
       optional($.else_keyword),
     )),
-
-    if_fallback: $ => token(/[^; ]+/),
 
     if_keyword: $ => token("if"),
     then_keyword: $ => token("then"),
     else_keyword: $ => token("else"),
 
     binary_expression: $ => seq(
-      $.value_expression,
+      $._value_expression,
       $.operator,
-      $.value_expression,
+      $._value_expression,
     ),
 
-    value_expression: $ => choice(
+    operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "==", "=", "!=", "!", "=~", "!~", / or | and | !isin | isin /i)),
+
+    // variable references
+    _value_expression: $ => choice(
       $.single_quoted_string,
       $.number,
       $.variable_ref,
     ),
 
-    operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "==", "=", "!=", "!", "=~", "!~", / or | and | !isin | isin /i)),
+    single_quoted_string: $ => seq(
+      $._single_quote,
+      repeat(choice(
+        $.variable_ref,
+        $.number,
+        token(/[^']/),
+      )),
+      $._single_quote,
+    ),
 
+    double_quoted_string: $ => seq(
+      $._double_quote,
+      repeat(choice(
+        $.single_quoted_string,
+        $.variable_ref,
+        $.number,
+        token(/[^"]/),
+      )),
+      $._double_quote,
+    ),
 
-
+    variable_ref: $ => choice(
+      $.ezquake_variable_ref,
+      $.qizmo_macro_ref,
+      $.function_param_ref,
+      $.user_variable_ref,
+    ),
+    function_param_ref: $ => token(/%[0-9]/),
+    qizmo_macro_ref: $ => token(/%[abc]/i),
+    user_variable_ref: $ => seq("$", /[a-z0-9_]*/i),
+    ezquake_variable_ref: $ => token(choice("$ammo", "$armor", "$armortype", "$bestammo", "$bestweapon", "$health")),
 
     // keywords
     keyname: $ => token(choice(
@@ -184,7 +186,20 @@ export default grammar({
       /f1[0-5]/i,
       /space/i,
     )),
-    keyname_fallback: $ => /[^\s"]+/,
+    keyname_fallback: $ => token(/[^\s"]+/),
+
+    plus_command: $ => token(seq(
+      choice("+", "-"),
+      choice(
+        "attack",
+        "forward",
+        "back",
+        "fire",
+        "moveleft",
+        "moveright",
+        "showscores",
+      ),
+    )),
 
     function_name: $ => token(choice(
       "echo",
@@ -192,8 +207,10 @@ export default grammar({
       "disconnect",
       "volume",
       "place",
+      "impulse",
       "reconnect",
       "say",
+      "unbind",
       "unbindall",
       "wait",
       "quit",
