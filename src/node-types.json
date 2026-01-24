@@ -3,10 +3,14 @@
     "type": "alias_declaration",
     "named": true,
     "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
+      "command": {
+        "multiple": true,
+        "required": false,
         "types": [
+          {
+            "type": ";",
+            "named": false
+          },
           {
             "type": "alias_declaration",
             "named": true
@@ -29,10 +33,6 @@
           },
           {
             "type": "plus_command",
-            "named": true
-          },
-          {
-            "type": "unknown_statement",
             "named": true
           }
         ]
@@ -95,10 +95,14 @@
     "type": "bind_declaration",
     "named": true,
     "fields": {
-      "expression": {
-        "multiple": false,
-        "required": true,
+      "command": {
+        "multiple": true,
+        "required": false,
         "types": [
+          {
+            "type": ";",
+            "named": false
+          },
           {
             "type": "alias_declaration",
             "named": true
@@ -121,10 +125,6 @@
           },
           {
             "type": "plus_command",
-            "named": true
-          },
-          {
-            "type": "unknown_statement",
             "named": true
           }
         ]
@@ -187,6 +187,10 @@
           "named": true
         },
         {
+          "type": "the_rest",
+          "named": true
+        },
+        {
           "type": "variable_ref",
           "named": true
         }
@@ -197,12 +201,36 @@
     "type": "expr_alias_declaration",
     "named": true,
     "fields": {
-      "body": {
-        "multiple": false,
-        "required": true,
+      "command": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
-            "type": "expression_statement",
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "expr_alias_declaration",
+            "named": true
+          },
+          {
+            "type": "expr_bind_declaration",
+            "named": true
+          },
+          {
+            "type": "expr_function_call",
+            "named": true
+          },
+          {
+            "type": "expr_if_statement",
+            "named": true
+          },
+          {
+            "type": "plus_command",
+            "named": true
+          },
+          {
+            "type": "unknown_expression_statement",
             "named": true
           }
         ]
@@ -233,12 +261,36 @@
     "type": "expr_bind_declaration",
     "named": true,
     "fields": {
-      "expression": {
-        "multiple": false,
-        "required": true,
+      "command": {
+        "multiple": true,
+        "required": false,
         "types": [
           {
-            "type": "expression_statement",
+            "type": ";",
+            "named": false
+          },
+          {
+            "type": "expr_alias_declaration",
+            "named": true
+          },
+          {
+            "type": "expr_bind_declaration",
+            "named": true
+          },
+          {
+            "type": "expr_function_call",
+            "named": true
+          },
+          {
+            "type": "expr_if_statement",
+            "named": true
+          },
+          {
+            "type": "plus_command",
+            "named": true
+          },
+          {
+            "type": "unknown_expression_statement",
             "named": true
           }
         ]
@@ -315,27 +367,63 @@
     }
   },
   {
-    "type": "expression",
+    "type": "expr_if_statement",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
-          "type": "expression_statement",
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "else_keyword",
+          "named": true
+        },
+        {
+          "type": "expr_alias_declaration",
+          "named": true
+        },
+        {
+          "type": "expr_bind_declaration",
+          "named": true
+        },
+        {
+          "type": "expr_function_call",
+          "named": true
+        },
+        {
+          "type": "expr_if_statement",
+          "named": true
+        },
+        {
+          "type": "if_keyword",
+          "named": true
+        },
+        {
+          "type": "plus_command",
+          "named": true
+        },
+        {
+          "type": "then_keyword",
+          "named": true
+        },
+        {
+          "type": "unknown_expression_statement",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "expression_statement",
+    "type": "expression",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": true,
+      "multiple": true,
+      "required": false,
       "types": [
         {
           "type": "expr_alias_declaration",
@@ -347,6 +435,14 @@
         },
         {
           "type": "expr_function_call",
+          "named": true
+        },
+        {
+          "type": "expr_if_statement",
+          "named": true
+        },
+        {
+          "type": "plus_command",
           "named": true
         },
         {
@@ -362,7 +458,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "double_quoted_string",
@@ -452,10 +548,6 @@
         {
           "type": "then_keyword",
           "named": true
-        },
-        {
-          "type": "unknown_statement",
-          "named": true
         }
       ]
     }
@@ -507,23 +599,9 @@
         {
           "type": "plus_command",
           "named": true
-        },
-        {
-          "type": "unknown_statement",
-          "named": true
         }
       ]
     }
-  },
-  {
-    "type": "unknown_expression_statement",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "unknown_statement",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "user_variable_ref",
@@ -647,7 +725,15 @@
     "named": false
   },
   {
+    "type": "the_rest",
+    "named": true
+  },
+  {
     "type": "then_keyword",
+    "named": true
+  },
+  {
+    "type": "unknown_expression_statement",
     "named": true
   }
 ]
