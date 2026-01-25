@@ -34,6 +34,14 @@
           {
             "type": "plus_command",
             "named": true
+          },
+          {
+            "type": "set_declaration",
+            "named": true
+          },
+          {
+            "type": "unknown_statement",
+            "named": true
           }
         ]
       },
@@ -126,6 +134,14 @@
           {
             "type": "plus_command",
             "named": true
+          },
+          {
+            "type": "set_declaration",
+            "named": true
+          },
+          {
+            "type": "unknown_statement",
+            "named": true
           }
         ]
       },
@@ -179,15 +195,15 @@
       "required": false,
       "types": [
         {
+          "type": "label_like",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
         {
           "type": "single_quoted_string",
-          "named": true
-        },
-        {
-          "type": "the_rest",
           "named": true
         },
         {
@@ -202,13 +218,9 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
-          {
-            "type": ";",
-            "named": false
-          },
           {
             "type": "expr_alias_declaration",
             "named": true
@@ -223,10 +235,6 @@
           },
           {
             "type": "expr_if_statement",
-            "named": true
-          },
-          {
-            "type": "plus_command",
             "named": true
           },
           {
@@ -262,13 +270,9 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
-          {
-            "type": ";",
-            "named": false
-          },
           {
             "type": "expr_alias_declaration",
             "named": true
@@ -283,10 +287,6 @@
           },
           {
             "type": "expr_if_statement",
-            "named": true
-          },
-          {
-            "type": "plus_command",
             "named": true
           },
           {
@@ -325,6 +325,10 @@
       "multiple": false,
       "required": false,
       "types": [
+        {
+          "type": "label_like",
+          "named": true
+        },
         {
           "type": "number",
           "named": true
@@ -375,10 +379,6 @@
       "required": true,
       "types": [
         {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
           "type": "else_keyword",
           "named": true
         },
@@ -403,7 +403,7 @@
           "named": true
         },
         {
-          "type": "plus_command",
+          "type": "logical_condition",
           "named": true
         },
         {
@@ -442,10 +442,6 @@
           "named": true
         },
         {
-          "type": "plus_command",
-          "named": true
-        },
-        {
           "type": "unknown_expression_statement",
           "named": true
         }
@@ -462,6 +458,10 @@
       "types": [
         {
           "type": "double_quoted_string",
+          "named": true
+        },
+        {
+          "type": "label_like",
           "named": true
         },
         {
@@ -518,10 +518,6 @@
           "named": true
         },
         {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
           "type": "bind_declaration",
           "named": true
         },
@@ -542,15 +538,93 @@
           "named": true
         },
         {
+          "type": "logical_condition",
+          "named": true
+        },
+        {
           "type": "plus_command",
+          "named": true
+        },
+        {
+          "type": "set_declaration",
           "named": true
         },
         {
           "type": "then_keyword",
           "named": true
+        },
+        {
+          "type": "unknown_statement",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "logical_condition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "set_declaration",
+    "named": true,
+    "fields": {
+      "function": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "set_function",
+            "named": true
+          }
+        ]
+      },
+      "key": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "variable_name",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "variable_name",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "variable_value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "set_function",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "single_quoted_string",
@@ -599,12 +673,30 @@
         {
           "type": "plus_command",
           "named": true
+        },
+        {
+          "type": "set_declaration",
+          "named": true
+        },
+        {
+          "type": "unknown_statement",
+          "named": true
         }
       ]
     }
   },
   {
-    "type": "user_variable_ref",
+    "type": "unknown_expression_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "unknown_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "variable_name",
     "named": true,
     "fields": {}
   },
@@ -636,11 +728,38 @@
     }
   },
   {
-    "type": "\"",
-    "named": false
+    "type": "variable_value",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "double_quoted_string",
+          "named": true
+        },
+        {
+          "type": "label_like",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "single_quoted_string",
+          "named": true
+        },
+        {
+          "type": "variable_ref",
+          "named": true
+        }
+      ]
+    }
   },
   {
-    "type": "$",
+    "type": "\"",
     "named": false
   },
   {
@@ -705,6 +824,10 @@
     "named": true
   },
   {
+    "type": "label_like",
+    "named": true
+  },
+  {
     "type": "number",
     "named": true
   },
@@ -721,19 +844,23 @@
     "named": true
   },
   {
-    "type": "temp_alias",
+    "type": "set",
     "named": false
   },
   {
-    "type": "the_rest",
-    "named": true
+    "type": "set_tp",
+    "named": false
+  },
+  {
+    "type": "temp_alias",
+    "named": false
   },
   {
     "type": "then_keyword",
     "named": true
   },
   {
-    "type": "unknown_expression_statement",
+    "type": "user_variable_ref",
     "named": true
   }
 ]

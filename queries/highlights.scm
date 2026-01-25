@@ -12,9 +12,16 @@
   name: (alias_name) @variable
 )
 
+(number) @number
+
 (bind_declaration
   function: (bind_function) @function
   key: (bind_key (keyname)) @variable.parameter
+)
+
+(set_declaration
+  function: (set_function) @function
+  name: (variable_name) @variable.parameter
 )
 
 (expr_bind_declaration
@@ -55,4 +62,4 @@
   ] @keyword
 )
 
-(binary_expression (operator) @operator)
+(operator) @operator
