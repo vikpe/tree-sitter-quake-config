@@ -14,7 +14,7 @@
 
 (number) @number
 
-(single_quoted_string (variable_ref) @variable) @attribute
+(single_quoted_string (variable_ref) @variable)
 
 (bind_function) @function
 (keyname) @variable.parameter
@@ -44,15 +44,20 @@
 
 (plus_command) @string.special
 
-(source_file
-  (if_statement
-    [
-      (if_keyword)
-      (then_keyword)
-      (else_keyword)
-    ] @keyword
-  )
+(if_statement
+  [
+    (if_keyword)
+    (then_keyword)
+    (else_keyword)
+  ] @keyword
 )
 
+(expr_if_statement
+  [
+    (if_keyword)
+    (then_keyword)
+    (else_keyword)
+  ] @keyword
+)
 
 (operator) @operator

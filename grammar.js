@@ -19,7 +19,12 @@ export default grammar({
   ],
 
   rules: {
-    source_file: $ => repeat($._statement),
+    source_file: $ => repeat(
+      choice(
+        seq($._statement, $._statement_terminator),
+        $._statement_terminator,
+      )
+    ),
 
       // primitives
     comment: $ => token(seq('//', /.*/)),
@@ -32,26 +37,19 @@ export default grammar({
     _double_quote: $ => token("\""),
     _statement_terminator: $ => choice($._terminator, $._newline),
 
-    // top level statements
-    _statement: $ => prec.left(seq(
-      prec.left(choice(
-        $.alias_declaration,
-        $.bind_declaration,
-        $.set_declaration,
-        $.function_call,
-        $.if_statement,
-        $.plus_command,
-        $._statement_terminator,
-        // $.unknown_statement,
-      )),
-      optional($._statement_terminator),
+    // statements
+    _statement: $ =>  prec.left(choice(
+      $.alias_declaration,
+      $.bind_declaration,
+      $.set_declaration,
+      $.function_call,
+      $.if_statement,
+      $.plus_command,
+      $.unknown_statement,
     )),
 
     // todo: fix this
-    unknown_statement: $ => seq(
-      repeat1(token(/[^\s]/)),
-      $._statement_terminator
-    ),
+    unknown_statement: $ => prec.left(repeat1(token(/[^\s;]/))),
 
     // alias
     alias_function: $ => choice("alias", "temp_alias"),
@@ -82,7 +80,6 @@ export default grammar({
       ),
       $._horizontal_whitespace,
       field("command", choice($._statement, $.expression)),
-      optional($._statement_terminator),
     )),
 
     // set
@@ -112,7 +109,6 @@ export default grammar({
     function_call: $ => prec.left(seq(
       field("name", $.function_name),
       field("args", repeat($.function_arg)),
-      $._statement_terminator,
     )),
     function_arg: $ => choice(
       $.double_quoted_string,
@@ -123,19 +119,27 @@ export default grammar({
       token(/[^\n;]/), // fallback
     ),
 
-    // todo: inline/block statement
-    block_statement: $ => seq(/x/i), //
-    inline_statement: $ => seq(/x/i), //
-
     // if statement
     if_statement: $ => prec.right(seq(
       $.if_keyword,
       $.logical_condition,
       $.then_keyword,
-      $._horizontal_whitespace,
+      $._whitespace,
       $._statement,
-      optional(seq($.else_keyword, $._horizontal_whitespace, $._statement)),
+      optional(seq(
+        $.else_keyword,
+        $._whitespace,
+        $._statement,
+      )),
     )),
+
+    inline_statement: $ => choice(
+      $.alias_declaration,
+      $.bind_declaration,
+      $.set_declaration,
+      $.function_call,
+      $.unknown_statement,
+    ),
 
     if_keyword: $ => token("if"),
     logical_condition: $ => seq("(", $.binary_expression, ")"),

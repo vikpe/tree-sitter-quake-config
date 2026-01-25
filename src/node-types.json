@@ -4,13 +4,9 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
-          {
-            "type": ";",
-            "named": false
-          },
           {
             "type": "alias_declaration",
             "named": true
@@ -37,6 +33,10 @@
           },
           {
             "type": "set_declaration",
+            "named": true
+          },
+          {
+            "type": "unknown_statement",
             "named": true
           }
         ]
@@ -104,13 +104,9 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
-          {
-            "type": ";",
-            "named": false
-          },
           {
             "type": "alias_declaration",
             "named": true
@@ -137,6 +133,10 @@
           },
           {
             "type": "set_declaration",
+            "named": true
+          },
+          {
+            "type": "unknown_statement",
             "named": true
           }
         ]
@@ -552,6 +552,10 @@
         {
           "type": "then_keyword",
           "named": true
+        },
+        {
+          "type": "unknown_statement",
+          "named": true
         }
       ]
     }
@@ -689,12 +693,21 @@
         {
           "type": "set_declaration",
           "named": true
+        },
+        {
+          "type": "unknown_statement",
+          "named": true
         }
       ]
     }
   },
   {
     "type": "unknown_expression_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "unknown_statement",
     "named": true,
     "fields": {}
   },
