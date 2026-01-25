@@ -38,10 +38,6 @@
           {
             "type": "set_declaration",
             "named": true
-          },
-          {
-            "type": "unknown_statement",
-            "named": true
           }
         ]
       },
@@ -80,6 +76,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "label_like",
+          "named": true
+        },
         {
           "type": "number",
           "named": true
@@ -138,10 +138,6 @@
           {
             "type": "set_declaration",
             "named": true
-          },
-          {
-            "type": "unknown_statement",
-            "named": true
           }
         ]
       },
@@ -194,6 +190,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "char",
+          "named": true
+        },
         {
           "type": "label_like",
           "named": true
@@ -552,10 +552,6 @@
         {
           "type": "then_keyword",
           "named": true
-        },
-        {
-          "type": "unknown_statement",
-          "named": true
         }
       ]
     }
@@ -614,7 +610,19 @@
         "required": true,
         "types": [
           {
-            "type": "variable_value",
+            "type": "double_quoted_string",
+            "named": true
+          },
+          {
+            "type": "label_like",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "single_quoted_string",
             "named": true
           }
         ]
@@ -634,6 +642,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "label_like",
+          "named": true
+        },
         {
           "type": "number",
           "named": true
@@ -677,21 +689,12 @@
         {
           "type": "set_declaration",
           "named": true
-        },
-        {
-          "type": "unknown_statement",
-          "named": true
         }
       ]
     }
   },
   {
     "type": "unknown_expression_statement",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "unknown_statement",
     "named": true,
     "fields": {}
   },
@@ -728,37 +731,6 @@
     }
   },
   {
-    "type": "variable_value",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "double_quoted_string",
-          "named": true
-        },
-        {
-          "type": "label_like",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "single_quoted_string",
-          "named": true
-        },
-        {
-          "type": "variable_ref",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "\"",
     "named": false
   },
@@ -788,6 +760,10 @@
   },
   {
     "type": "bind_function",
+    "named": true
+  },
+  {
+    "type": "char",
     "named": true
   },
   {

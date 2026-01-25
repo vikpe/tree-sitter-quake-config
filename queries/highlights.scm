@@ -3,21 +3,21 @@
 ; (unknown_statement) @error
 
 (alias_declaration
-  function: (alias_function) @keyword
-  name: (alias_name) @variable
+  function: (alias_function) @function
+  name: (alias_name) @variable.parameter
 )
 
 (expr_alias_declaration
-  function: (alias_function) @keyword
-  name: (alias_name) @variable
+  function: (alias_function) @function
+  name: (alias_name) @variable.parameter
 )
 
 (number) @number
 
-(bind_declaration
-  function: (bind_function) @function
-  key: (bind_key (keyname)) @variable.parameter
-)
+(single_quoted_string (variable_ref) @variable) @attribute
+
+(bind_function) @function
+(keyname) @variable.parameter
 
 (set_declaration
   function: (set_function) @function
@@ -54,12 +54,5 @@
   )
 )
 
-(expr_if_statement
-  [
-    (if_keyword)
-    (then_keyword)
-    (else_keyword)
-  ] @keyword
-)
 
 (operator) @operator
