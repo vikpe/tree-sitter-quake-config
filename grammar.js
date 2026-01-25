@@ -133,14 +133,6 @@ export default grammar({
       )),
     )),
 
-    inline_statement: $ => choice(
-      $.alias_declaration,
-      $.bind_declaration,
-      $.set_declaration,
-      $.function_call,
-      $.unknown_statement,
-    ),
-
     if_keyword: $ => token("if"),
     logical_condition: $ => seq("(", $.binary_expression, ")"),
     then_keyword: $ => token("then"),
@@ -162,12 +154,18 @@ export default grammar({
     operator: $ => token(choice("+", "-", "/", "*", ">", "<", "|", "==", "=", "!=", "!", "=~", "!~", / or | and | !isin | isin /i)),
 
     // expression
-    expression: $ => seq(
-      $._double_quote,
-      repeat($._expression_statement),
-      $._double_quote,
+    expression: $ => choice(
+      token(/"\s*\"/),
+      seq(
+        $._double_quote,
+        repeat(choice(
+          $._expression_statement,
+          $._terminator,
+        )),
+        $._double_quote,
+      )
     ),
-    _expression_statement: $ => prec.left(seq(
+    _expression_statement: $ => prec.left(
       choice(
         $.expr_alias_declaration,
         $.expr_bind_declaration,
@@ -175,8 +173,8 @@ export default grammar({
         $.expr_if_statement,
         $.unknown_expression_statement,
       ),
-    )),
-    unknown_expression_statement: $ => prec.right(repeat1(token(/[^\s"]/))),
+    ),
+    unknown_expression_statement: $ => prec.left(repeat1(token(/[^\s"]/))),
 
     expr_alias_declaration: $ => seq(
       field("function", $.alias_function),
