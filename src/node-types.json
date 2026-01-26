@@ -342,11 +342,11 @@
     }
   },
   {
-    "type": "expr_function_arg",
+    "type": "expr_function_args",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -373,11 +373,11 @@
     "named": true,
     "fields": {
       "args": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "expr_function_arg",
+            "type": "expr_function_args",
             "named": true
           }
         ]
@@ -465,11 +465,11 @@
     }
   },
   {
-    "type": "function_arg",
+    "type": "function_args",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -500,11 +500,11 @@
     "named": true,
     "fields": {
       "args": {
-        "multiple": true,
+        "multiple": false,
         "required": false,
         "types": [
           {
-            "type": "function_arg",
+            "type": "function_args",
             "named": true
           }
         ]
