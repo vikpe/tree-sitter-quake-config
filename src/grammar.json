@@ -524,10 +524,6 @@
               "type": "SEQ",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "_horizontal_whitespace"
-                },
-                {
                   "type": "FIELD",
                   "name": "arg",
                   "content": {
@@ -557,7 +553,7 @@
                         "type": "TOKEN",
                         "content": {
                           "type": "PATTERN",
-                          "value": "[^\\s;]+"
+                          "value": "[^\\s;\\d]"
                         }
                       }
                     ]
@@ -601,10 +597,6 @@
               {
                 "type": "SEQ",
                 "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_horizontal_whitespace"
-                  },
                   {
                     "type": "SYMBOL",
                     "name": "else_keyword"
@@ -1001,7 +993,7 @@
                         "type": "TOKEN",
                         "content": {
                           "type": "PATTERN",
-                          "value": "[^\\s; \"]+"
+                          "value": "[^\\s;\"]"
                         }
                       }
                     ]

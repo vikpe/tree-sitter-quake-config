@@ -112,14 +112,13 @@ export default grammar({
     function_call: $ => prec.left(seq(
       field("name", $.function_name),
       repeat(seq(
-        $._horizontal_whitespace,
         field("arg", choice(
           $.double_quoted_string,
           $.single_quoted_string,
           $.variable_ref,
           $.label_like,
           $.number,
-          token(/[^\s;]+/), // fallback
+          token(/[^\s;\d]/), // fallback
         )),
       ))
     )),
@@ -132,7 +131,6 @@ export default grammar({
       $._horizontal_whitespace,
       $._inline_statement,
       optional(seq(
-        $._horizontal_whitespace,
         $.else_keyword,
         $._horizontal_whitespace,
         $._inline_statement,
@@ -209,7 +207,7 @@ export default grammar({
           $.variable_ref,
           $.label_like,
           $.number,
-          token(/[^\s; "]+/), // fallback
+          token(/[^\s;"]/), // fallback
         )),
       )),
     )),
