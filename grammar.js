@@ -10,7 +10,7 @@ export default grammar({
   name: "quake_config",
 
   extras: $ => [
-    /\s/,      // whitespace
+    /[\t ]/,   // horizontal whitespace
     $.comment  // single-line comments
   ],
 
@@ -19,59 +19,64 @@ export default grammar({
   ],
 
   rules: {
-    source_file: $ => repeat(
+    config: $ => repeat(
       choice(
-        seq($._statement, $._statement_terminator),
-        $._statement_terminator,
+        seq($._statement, choice($._terminator, $._newline)),
+        $._terminator,
+        $._newline,
       )
     ),
+     _fallback: $ => token(/[^\s;]/),
 
       // primitives
     comment: $ => token(seq('//', /.*/)),
     number: $ => token(/-?\d+(\.\d+)?/),
-    _whitespace: $ => token(/\s+/),
-    _horizontal_whitespace: $ => token(/[\t ]+/),
     _terminator: $ => token(";"),
+    _whitespace: $ => token(/\s+/),
+    non_whitespace: $ => token(/[^\s]/),
+    _horizontal_whitespace: $ => token(/[\t ]+/),
     _newline: $ => token(/\r?\n/),
     _single_quote: $ => token("'"),
     _double_quote: $ => token("\""),
-    _statement_terminator: $ => choice($._terminator, $._newline),
 
     // statements
     _statement: $ =>  prec.left(choice(
-      $.alias_declaration,
-      $.bind_declaration,
-      $.set_declaration,
+      $.alias,
+      $.bind,
+      $.variable_declaration,
       $.function_call,
       $.if_statement,
       $.plus_command,
-      $.unknown_statement,
+      repeat1($._fallback),
     )),
 
-    // todo: fix this
-    unknown_statement: $ => prec.left(repeat1(token(/[^\s;]/))),
-
     // alias
-    alias_function: $ => choice("alias", "temp_alias"),
-    alias_name: $ => token(/[^"\s]+/),
-
-    alias_declaration: $ => prec.left(seq(
+    alias: $ => seq(
       field("function", $.alias_function),
       $._horizontal_whitespace,
       choice(
-        seq($._double_quote, field("name", $.alias_name), $._double_quote),
         field("name", $.alias_name),
+        seq(
+          $._double_quote,
+          field("name", $.alias_name_within_quotes),
+          repeat($._double_quote),
+        ),
       ),
-      $._horizontal_whitespace,
-      field("command", choice($._statement, $.expression)),
-      optional($._statement_terminator),
-    )),
+      optional(seq(
+        $._horizontal_whitespace,
+        field("value", choice(
+          $._statement,
+          $.expression,
+        )),
+      )),
+    ),
+    alias_name: $ => token(seq(/[^\s;"]/, repeat(/[^\s;]/))),
+    alias_name_within_quotes: $ => token(repeat1(/[^\s;"]/)),
 
     // bind
-    bind_function: $ => token("bind"),
     bind_key: $ => choice($.keyname, $.keyname_fallback),
 
-    bind_declaration: $ => prec.left(seq(
+    bind: $ => prec.left(seq(
       field("function", $.bind_function),
       $._horizontal_whitespace,
       choice(
@@ -79,14 +84,15 @@ export default grammar({
         seq($._double_quote, field("key", $.bind_key), $._double_quote),
       ),
       $._horizontal_whitespace,
-      field("command", choice($._statement, $.expression)),
+      field("value", choice(
+        $._statement,
+        $.expression,
+      )),
     )),
 
     // set
-    set_function: $ => choice("set", "set_tp"),
-
-    set_declaration: $ => seq(
-      field("function", $.set_function),
+    variable_declaration: $ => seq(
+      field("function", $.variable_function),
       $._horizontal_whitespace,
       choice(
         field("name", $.variable_name),
@@ -155,28 +161,30 @@ export default grammar({
 
     // expression
     expression: $ => choice(
-      token(/"\s*\"/),
       seq(
         $._double_quote,
+        $._whitespace,
+        $._double_quote
+      ),
+      seq(
+        $._double_quote,
+        $._expression_statement,
         repeat(choice(
-          $._expression_statement,
+          seq($._terminator, $._expression_statement),
           $._terminator,
         )),
         $._double_quote,
       )
     ),
-    _expression_statement: $ => prec.left(
-      choice(
-        $.expr_alias_declaration,
-        $.expr_bind_declaration,
-        $.expr_function_call,
-        $.expr_if_statement,
-        $.unknown_expression_statement,
-      ),
+    _expression_statement: $ => choice(
+      $.expr_alias,
+      $.expr_bind,
+      $.expr_function_call,
+      $.expr_if_statement,
+      repeat1($._fallback),
     ),
-    unknown_expression_statement: $ => prec.left(repeat1(token(/[^\s"]/))),
 
-    expr_alias_declaration: $ => seq(
+    expr_alias: $ => seq(
       field("function", $.alias_function),
       $._whitespace,
       field("name", $.alias_name),
@@ -184,7 +192,7 @@ export default grammar({
       field("command", $._expression_statement),
     ),
 
-    expr_bind_declaration: $ => seq(
+    expr_bind: $ => seq(
       field("function", $.bind_function),
       $._whitespace,
       field("key", $.bind_key),
@@ -281,7 +289,14 @@ export default grammar({
       ),
     )),
 
-    function_name: $ => token(choice(
+    alias_function: $ => choice("alias", "temp_alias"),
+    bind_function: $ => token("bind"),
+    variable_function: $ => choice("set", "set_tp"),
+
+    function_name: $ => choice(
+      $.alias_function,
+      $.bind_function,
+      $.variable_function,
       "color",
       "connect",
       "disconnect",
@@ -298,6 +313,6 @@ export default grammar({
       "unbindall",
       "volume",
       "wait",
-    )),
+    ),
   }
 });

@@ -2,29 +2,32 @@
 (ERROR) @error
 ; (unknown_statement) @error
 
-(alias_declaration
+(alias
   function: (alias_function) @function
-  name: (alias_name) @variable.parameter
+  name: (_) @variable.parameter
 )
 
-(expr_alias_declaration
+(expr_alias
   function: (alias_function) @function
-  name: (alias_name) @variable.parameter
+  name: (_) @variable.parameter
 )
 
 (number) @number
 
 (single_quoted_string (variable_ref) @variable)
 
-(bind_function) @function
+(bind
+  (bind_function) @function
+)
+
 (keyname) @variable.parameter
 
-(set_declaration
-  function: (set_function) @function
+(variable_declaration
+  function: (variable_function) @function
   name: (variable_name) @variable.parameter
 )
 
-(expr_bind_declaration
+(expr_bind
   function: (bind_function) @function
   key: (bind_key (keyname)) @variable.parameter
 )
