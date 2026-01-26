@@ -3,6 +3,16 @@
     "type": "alias",
     "named": true,
     "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      },
       "function": {
         "multiple": false,
         "required": true,
@@ -44,6 +54,10 @@
             "named": true
           },
           {
+            "type": "fallback_token",
+            "named": true
+          },
+          {
             "type": "function_call",
             "named": true
           },
@@ -77,6 +91,10 @@
       "required": true,
       "types": [
         {
+          "type": "double_quoted_string",
+          "named": true
+        },
+        {
           "type": "label_like",
           "named": true
         },
@@ -103,6 +121,16 @@
     "type": "bind",
     "named": true,
     "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      },
       "function": {
         "multiple": false,
         "required": true,
@@ -125,7 +153,7 @@
       },
       "value": {
         "multiple": true,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "alias",
@@ -137,6 +165,10 @@
           },
           {
             "type": "expression",
+            "named": true
+          },
+          {
+            "type": "fallback_token",
             "named": true
           },
           {
@@ -182,7 +214,18 @@
     "type": "config",
     "named": true,
     "root": true,
-    "fields": {},
+    "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -250,8 +293,8 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "expr_alias",
@@ -267,6 +310,20 @@
           },
           {
             "type": "expr_if_statement",
+            "named": true
+          },
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      },
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
             "named": true
           }
         ]
@@ -298,8 +355,8 @@
     "named": true,
     "fields": {
       "command": {
-        "multiple": true,
-        "required": false,
+        "multiple": false,
+        "required": true,
         "types": [
           {
             "type": "expr_alias",
@@ -315,6 +372,20 @@
           },
           {
             "type": "expr_if_statement",
+            "named": true
+          },
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      },
+      "content": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
             "named": true
           }
         ]
@@ -342,42 +413,27 @@
     }
   },
   {
-    "type": "expr_function_args",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "label_like",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "single_quoted_string",
-          "named": true
-        },
-        {
-          "type": "variable_ref",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "expr_function_call",
     "named": true,
     "fields": {
-      "args": {
-        "multiple": false,
+      "arg": {
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "expr_function_args",
+            "type": "label_like",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "single_quoted_string",
+            "named": true
+          },
+          {
+            "type": "variable_ref",
             "named": true
           }
         ]
@@ -407,18 +463,6 @@
           "named": true
         },
         {
-          "type": "expr_alias",
-          "named": true
-        },
-        {
-          "type": "expr_bind",
-          "named": true
-        },
-        {
-          "type": "expr_function_call",
-          "named": true
-        },
-        {
           "type": "expr_if_statement",
           "named": true
         },
@@ -440,7 +484,18 @@
   {
     "type": "expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
@@ -465,46 +520,36 @@
     }
   },
   {
-    "type": "function_args",
+    "type": "fallback_token",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "double_quoted_string",
-          "named": true
-        },
-        {
-          "type": "label_like",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "single_quoted_string",
-          "named": true
-        },
-        {
-          "type": "variable_ref",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "function_call",
     "named": true,
     "fields": {
-      "args": {
-        "multiple": false,
+      "arg": {
+        "multiple": true,
         "required": false,
         "types": [
           {
-            "type": "function_args",
+            "type": "double_quoted_string",
+            "named": true
+          },
+          {
+            "type": "label_like",
+            "named": true
+          },
+          {
+            "type": "number",
+            "named": true
+          },
+          {
+            "type": "single_quoted_string",
+            "named": true
+          },
+          {
+            "type": "variable_ref",
             "named": true
           }
         ]
@@ -522,29 +567,6 @@
     }
   },
   {
-    "type": "function_name",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "alias_function",
-          "named": true
-        },
-        {
-          "type": "bind_function",
-          "named": true
-        },
-        {
-          "type": "variable_function",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "if_statement",
     "named": true,
     "fields": {},
@@ -553,19 +575,7 @@
       "required": true,
       "types": [
         {
-          "type": "alias",
-          "named": true
-        },
-        {
-          "type": "bind",
-          "named": true
-        },
-        {
           "type": "else_keyword",
-          "named": true
-        },
-        {
-          "type": "function_call",
           "named": true
         },
         {
@@ -573,23 +583,11 @@
           "named": true
         },
         {
-          "type": "if_statement",
-          "named": true
-        },
-        {
           "type": "logical_condition",
           "named": true
         },
         {
-          "type": "plus_command",
-          "named": true
-        },
-        {
           "type": "then_keyword",
-          "named": true
-        },
-        {
-          "type": "variable_declaration",
           "named": true
         }
       ]
@@ -686,6 +684,10 @@
           {
             "type": "single_quoted_string",
             "named": true
+          },
+          {
+            "type": "variable_ref",
+            "named": true
           }
         ]
       }
@@ -769,25 +771,9 @@
     "named": true
   },
   {
-    "type": "color",
-    "named": false
-  },
-  {
     "type": "comment",
     "named": true,
     "extra": true
-  },
-  {
-    "type": "connect",
-    "named": false
-  },
-  {
-    "type": "disconnect",
-    "named": false
-  },
-  {
-    "type": "echo",
-    "named": false
   },
   {
     "type": "else_keyword",
@@ -798,8 +784,8 @@
     "named": true
   },
   {
-    "type": "fov",
-    "named": false
+    "type": "function_name",
+    "named": true
   },
   {
     "type": "function_param_ref",
@@ -808,10 +794,6 @@
   {
     "type": "if_keyword",
     "named": true
-  },
-  {
-    "type": "impulse",
-    "named": false
   },
   {
     "type": "keyname",
@@ -834,10 +816,6 @@
     "named": true
   },
   {
-    "type": "place",
-    "named": false
-  },
-  {
     "type": "plus_command",
     "named": true
   },
@@ -846,31 +824,11 @@
     "named": true
   },
   {
-    "type": "quit",
-    "named": false
-  },
-  {
-    "type": "reconnect",
-    "named": false
-  },
-  {
-    "type": "say",
-    "named": false
-  },
-  {
-    "type": "sensitivity",
-    "named": false
-  },
-  {
     "type": "set",
     "named": false
   },
   {
     "type": "set_tp",
-    "named": false
-  },
-  {
-    "type": "team",
     "named": false
   },
   {
@@ -882,23 +840,7 @@
     "named": true
   },
   {
-    "type": "unbind",
-    "named": false
-  },
-  {
-    "type": "unbindall",
-    "named": false
-  },
-  {
     "type": "user_variable_ref",
     "named": true
-  },
-  {
-    "type": "volume",
-    "named": false
-  },
-  {
-    "type": "wait",
-    "named": false
   }
 ]

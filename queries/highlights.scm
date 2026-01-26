@@ -1,5 +1,5 @@
 (comment) @comment
-(ERROR) @error
+; (ERROR) @error
 ; (unknown_statement) @error
 
 (alias
