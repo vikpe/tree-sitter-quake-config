@@ -569,13 +569,36 @@
   {
     "type": "if_statement",
     "named": true,
-    "fields": {},
+    "fields": {
+      "content": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "fallback_token",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "alias",
+          "named": true
+        },
+        {
+          "type": "bind",
+          "named": true
+        },
+        {
           "type": "else_keyword",
+          "named": true
+        },
+        {
+          "type": "function_call",
           "named": true
         },
         {
@@ -583,11 +606,23 @@
           "named": true
         },
         {
+          "type": "if_statement",
+          "named": true
+        },
+        {
           "type": "logical_condition",
           "named": true
         },
         {
+          "type": "plus_command",
+          "named": true
+        },
+        {
           "type": "then_keyword",
+          "named": true
+        },
+        {
+          "type": "variable_declaration",
           "named": true
         }
       ]

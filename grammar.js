@@ -130,12 +130,12 @@ export default grammar({
       $.logical_condition,
       $.then_keyword,
       $._horizontal_whitespace,
-      repeat1(/[^\s;]/),
+      $._inline_statement,
       optional(seq(
         $._horizontal_whitespace,
         $.else_keyword,
         $._horizontal_whitespace,
-        repeat1(/[^\s;]/),
+        $._inline_statement,
       )),
     )),
 
